@@ -58,7 +58,7 @@ class AuthController extends Controller
 
         RateLimiter::clear($throttleKey); // Reset hit kalau sukses
 
-        return redirect()->route('dashboard.index');
+        return redirect()->route('dashboard.index')->with('success', 'Selamat datang, ' . $user->name . '!');
     }
     public function logout(Request $request)
     {

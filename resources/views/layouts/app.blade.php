@@ -62,6 +62,8 @@
     <script src="{{ asset('dist/assets/js/plugins/world-merc.js') }}"></script>
     <script src="{{ asset('dist/assets/js/widgets/earnings-users-chart.js') }}"></script>
     <script src="{{ asset('dist/assets/js/widgets/world-map-markers.js') }}"></script>
+    <script src="{{ asset('dist/assets/js/plugins/sweetalert2.all.min.js') }}"></script>
+    {{-- <script src="{{ asset('dist/assets/js/elements/ac-alert.js') }}"></script> --}}
     <!--  --><!-- [Page Specific JS] end --><!-- Required Js -->
     <script src="{{ asset('dist/assets/js/plugins/popper.min.js') }}"></script>
     <script src="{{ asset('dist/assets/js/plugins/simplebar.min.js') }}"></script>
@@ -90,6 +92,24 @@
     </script>
     <script>
         preset_change("preset-1");
+    </script>
+    <script>
+        @if (Session::has('error'))
+            Swal.fire({
+                icon: "error",
+                delay: 1000,
+                title: "Oops...",
+                text: "{{ Session::get('error') }}",
+            });
+        @elseif (Session::has('success'))
+            Swal.fire({
+                icon: "success",
+                delay: 1000,
+                title: "Berhasil",
+                text: "{{ Session::get('success') }}",
+                confirmButtonText: "OK"
+            });
+        @endif
     </script>
 </body>
 <!-- [Body] end -->
