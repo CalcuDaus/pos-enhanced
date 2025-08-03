@@ -54,8 +54,9 @@
                             </h4>
                         </div>
                         <div class="mb-3">
-                            <input type="email" autocomplete="off" autofocus class="form-control mb-2"
-                                id="floatingInput" placeholder="Email Address" name="email" />
+                            <input type="email" autocomplete="off" value="{{ old('email') }}" autofocus
+                                class="form-control mb-2" id="floatingInput" placeholder="Email Address"
+                                name="email" />
                             @error('email')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror

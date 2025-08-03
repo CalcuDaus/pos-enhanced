@@ -60,4 +60,13 @@ class AuthController extends Controller
 
         return redirect()->route('dashboard.index');
     }
+    public function logout(Request $request)
+    {
+        Auth::logout(); // Hapus autentikasi user
+
+        $request->session()->invalidate(); // Hancurkan semua session data
+        $request->session()->regenerateToken(); // Regenerasi token CSRF untuk keamanan
+
+        return redirect()->route('login')->with('status', 'Anda telah logout.');
+    }
 }

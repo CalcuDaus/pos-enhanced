@@ -133,8 +133,13 @@
                                             <span>Settings</span></a>
                                     </li>
                                     <li>
-                                        <a class="pc-user-links"><i class="ph-duotone ph-power"></i>
-                                            <span>Logout</span></a>
+                                        <form action="{{ route('logout') }}" method="POST">
+                                            @csrf
+                                            <button style="border: none;background: transparent;width: 93%;"
+                                                type="submit" class="pc-user-links"><i
+                                                    class="ph-duotone ph-power"></i>
+                                                <span>Logout</span></button>
+                                        </form>
                                     </li>
                                 </ul>
                             </div>
