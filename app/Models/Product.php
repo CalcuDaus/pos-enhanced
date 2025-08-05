@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
-    protected $fillable = ['name', 'barcode', 'category_id', 'cost_price', 'price', 'stock'];
+    protected $fillable = ['name', 'image', 'barcode', 'category_id', 'cost_price', 'price', 'stock'];
 
     public function category(): BelongsTo
     {

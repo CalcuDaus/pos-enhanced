@@ -27,7 +27,7 @@
             <div class="card-body">
                 <div class=" p-sm-4 pb-sm-2 d-flex justify-content-between align-items-center">
                     <h4>{{ $title }}</h4>
-                    <a href="../application/ecom_product-add.html" class="btn btn-primary">
+                    <a href="{{ route('products.create', ['param' => 'add']) }}" class="btn btn-primary">
                         <i class="ti ti-plus f-18"></i> Add Product</a>
                 </div>
                 <div class="table-responsive">
@@ -72,7 +72,7 @@
                                                         class="ti ti-eye f-18"></i></a></li>
                                             <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
                                                 aria-label="Edit" data-bs-original-title="Edit"><a
-                                                    href="../application/ecom_product-add.html"
+                                                    href="{{ route('products.create', ['id' => Crypt::encrypt(1), 'param' => 'edit']) }}"
                                                     class="avtar avtar-xs btn-link-success btn-pc-default"><i
                                                         class="ti ti-edit-circle f-18"></i></a></li>
                                             <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
