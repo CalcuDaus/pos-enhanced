@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class ProductController extends Controller
                 ['name' => 'Kelola Produk', 'url' => route('products.index')],
                 ['name' => 'Produk', 'url' => route('products.index')],
             ],
+            'products' => Product::all(),
         ];
 
         return view('products.index', $data);
@@ -30,18 +32,19 @@ class ProductController extends Controller
      */
     public function create()
     {
-        if (request()->has('param') && request()->get('param') === 'add') {
+        if (request()->has('param') && Crypt::decrypt(request()->get('param')) === 'add') {
             $data = [
                 'title' => 'Tambah Produk',
                 'breadcrumbs' => [
                     ['name' => 'Kelola Produk', 'url' => route('products.index')],
-                    ['name' => 'Tambah Produk', 'url' => route('products.create', ['param' => 'add'])],
+                    ['name' => 'Tambah Produk', 'url' => route('products.create', ['param' => Crypt::encrypt('add')])],
                 ],
                 'product' => null,
                 'categories' => Category::all(),
+                'param' => Crypt::encrypt('add'),
             ];
             return view('products.form', $data);
-        } elseif (request()->has('param') && request()->get('param') === 'edit') {
+        } elseif (request()->has('param') && Crypt::decrypt(request()->get('param')) === 'edit') {
             if (Product::find(Crypt::decrypt(request()->input('id'))) === null) {
                 return redirect()->route('products.index')->with('error', 'Produk Tidak Ditemukan.');
             }
@@ -49,10 +52,12 @@ class ProductController extends Controller
                 'title' => 'Edit Produk',
                 'breadcrumbs' => [
                     ['name' => 'Kelola Produk', 'url' => route('products.index')],
-                    ['name' => 'Edit Produk', 'url' => route('products.create', ['id' => Crypt::encrypt(request()->input('id')), 'param' => 'edit'])],
+                    ['name' => 'Edit Produk', 'url' => route('products.create', ['id' => Crypt::encrypt(request()->input('id')), 'param' => Crypt::encrypt('edit')])],
                 ],
                 'product' => Product::find(Crypt::decrypt(request()->input('id'))),
                 'categories' => Category::all(),
+                'param' => Crypt::encrypt('edit'),
+
             ];
             return view('products.form', $data);
         } else {
@@ -63,9 +68,18 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        dd($request->all());
+        $validatedData = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('products', 'public');
+            $validatedData['image'] = $imagePath;
+        }
+
+        Product::create($validatedData);
+
+        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan.');
     }
 
     /**
@@ -87,9 +101,21 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductRequest $request, string $id)
     {
-        //
+        $validatedData = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('products', 'public');
+            $validatedData['image'] = $imagePath;
+        }
+
+        $product = Product::find(Crypt::decrypt($id));
+        if ($product) {
+            $product->update($validatedData);
+            return redirect()->route('products.index')->with('success', 'Produk berhasil diupdate.');
+        }
+        return redirect()->route('products.index')->with('error', 'Produk Tidak Ditemukan.');
     }
 
     /**
@@ -97,6 +123,11 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $product = Product::find(Crypt::decrypt($id));
+        if ($product) {
+            $product->delete();
+            return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus.');
+        }
+        return redirect()->route('products.index')->with('error', 'Produk Tidak Ditemukan.');
     }
 }

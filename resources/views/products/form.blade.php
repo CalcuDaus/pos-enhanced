@@ -22,13 +22,16 @@
         </div>
     </div>
     <!-- [ breadcrumb ] end --><!-- [ Main Content ] start -->
-    <form class="row" method="POST" action="{{ $product ? route('products.update') : route('products.store') }}"
+    <form class="row" method="POST"
+        action="{{ $product ? route('products.update', ['product' => Crypt::encrypt($product->id)]) : route('products.store') }}"
         enctype="multipart/form-data">
         @if ($product)
             @method('PUT')
             <input type="hidden" name="id" value="{{ Crypt::encrypt($product->id) }}">
         @endif
         @csrf
+        <input type="hidden" name="param" value="{{ $param }}">
+        <input type="hidden" name="barcode" value="{{ $product ? $product->barcode : strtoupper(Str::random(6)) }}">
         <div class="col-xl-6">
             <div class="card">
                 <div class="card-header">
@@ -37,21 +40,34 @@
                 <div class="card-body">
                     <div class="mb-3">
                         <label class="form-label">Nama Produk</label>
-                        <input type="text" class="form-control" name="name" placeholder="Masukkan Nama Produk">
+                        <input type="text" value="{{ old('name', $product ? $product->name : '') }}" class="form-control"
+                            name="name" placeholder="Masukkan Nama Produk">
+                        @error('name')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Kategori</label>
                         <select class="form-select" name="category_id">
                             <option selected disabled>Pilih Kategori</option>
-                            <option>Category 1</option>
-                            <option>Category 2</option>
-                            <option>Category 3</option>
-                            <option>Category 4</option>
+                            @forelse ($categories as $category)
+                                <option value="{{ $category->id }}"
+                                    {{ old('category_id', $product ? $product->category_id : '') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}</option>
+                            @empty
+                                <option disabled>Tidak ada kategori</option>
+                            @endforelse
                         </select>
+                        @error('category_id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="mb-0">
                         <label class="form-label">Deskripsi Produk</label>
-                        <textarea class="form-control" name="description" placeholder="Masukkan Deskripsi Produk"></textarea>
+                        <textarea class="form-control" name="description" placeholder="Masukkan Deskripsi Produk">{{ old('description', $product ? $product->description : 'description') }}</textarea>
+                        @error('description')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
             </div>
@@ -66,9 +82,14 @@
                                 <label class="form-label d-flex align-items-center">Harga Modal <i
                                         class="ph-duotone ph-info ms-1" data-bs-toggle="tooltip"
                                         data-bs-title="Harga Modal"></i></label>
-                                <div class="input-group mb-3"><span class="input-group-text">$</span>
-                                    <input type="text" class="form-control" name="cost_price" placeholder="Harga Modal">
+                                <div class="input-group mb-3"><span class="input-group-text">Rp.</span>
+                                    <input type="text"
+                                        value="{{ old('cost_price', $product ? $product->cost_price : '') }}"
+                                        class="form-control" name="cost_price" placeholder="Harga Modal">
                                 </div>
+                                @error('cost_price')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -76,9 +97,13 @@
                                 <label class="form-label d-flex align-items-center">Harga Jual <i
                                         class="ph-duotone ph-info ms-1" data-bs-toggle="tooltip"
                                         data-bs-title="Harga Jual"></i></label>
-                                <div class="input-group mb-3"><span class="input-group-text">$</span>
-                                    <input type="text" class="form-control" name="price" placeholder="Harga Jual">
+                                <div class="input-group mb-3"><span class="input-group-text">Rp.</span>
+                                    <input type="text" value="{{ old('price', $product ? $product->price : '') }}"
+                                        class="form-control" name="price" placeholder="Harga Jual">
                                 </div>
+                                @error('price')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -96,6 +121,9 @@
                         <label class="btn btn-outline-secondary" for="flupld"><i class="ti ti-upload me-2"></i> Klik Untuk
                             Unggah</label>
                         <input type="file" id="flupld" name="image" class="d-none">
+                        @error('image')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="preview-image">
                         @if ($product && $product->image)
@@ -113,7 +141,11 @@
                 <div class="card-body">
                     <div class="mb-3">
                         <label class="form-label">Stok</label>
-                        <input type="text" class="form-control" name="stock" placeholder="Masukkan Stok">
+                        <input type="text" value="{{ old('stock', $product ? $product->stock : '') }}"
+                            class="form-control" name="stock" placeholder="Masukkan Stok">
+                        @error('stock')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
             </div>

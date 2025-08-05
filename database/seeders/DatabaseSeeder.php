@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -20,6 +21,34 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@test.com',
             'password' => bcrypt('123'),
             'role' => 'admin'
+        ]);
+
+        Category::factory()->create([
+            'name' => 'Buku',
+        ]);
+        Category::factory()->create([
+            'name' => 'Voucher',
+        ]);
+        Category::factory()->create([
+            'name' => 'Elektronik',
+        ]);
+        Category::factory()->create([
+            'name' => 'Alat Tulis',
+        ]);
+        Category::factory()->create([
+            'name' => 'Aksesoris',
+        ]);
+        Category::factory()->create([
+            'name' => 'Alat Tulis Kantor',
+        ]);
+        Category::factory()->create([
+            'name' => 'Voucher Paket',
+        ]);
+        Category::factory()->create([
+            'name' => 'Voucher Game',
+        ]);
+        Category::factory()->create([
+            'name' => 'Kategori Lainnya',
         ]);
     }
 }
