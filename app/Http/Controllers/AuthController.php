@@ -23,12 +23,12 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required|min:6',
+            'password' => 'required|min:3',
         ], [
             'email.required' => 'Email tidak boleh kosong',
             'email.email' => 'Format email tidak valid',
             'password.required' => 'Password tidak boleh kosong',
-            'password.min' => 'Password harus terdiri dari minimal 6 karakter',
+            'password.min' => 'Password harus terdiri dari minimal 3 karakter',
         ]);
 
         $throttleKey = Str::lower($request->input('email')) . '|' . $request->ip();

@@ -60,13 +60,15 @@
                                 <polyline points="9 18 15 12 9 6"></polyline>
                             </svg></span></a>
                     <ul class="pc-submenu" style="display: block; box-sizing: border-box;">
-                        <li class="pc-item"><a class="pc-link" href="#" data-i18n="Produk">Produk</a></li>
-                        <li class="pc-item"><a class="pc-link" href="#" data-i18n="Kategori">Kategori</a></li>
-                        <li class="pc-item"><a class="pc-link" href="#" data-i18n="Pelanggan">Pelanggan</a>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('products.index') }}"
+                                data-i18n="Produk">Produk</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('categories.index') }}"
+                                data-i18n="Kategori">Kategori</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('customers.index') }}"
+                                data-i18n="Pelanggan">Pelanggan</a>
                         </li>
-                        <li class="pc-item"><a class="pc-link" href="#" data-i18n="Penjualan">Penjualan</a>
-                        </li>
-                        <li class="pc-item"><a class="pc-link" href="#" data-i18n="Log Stok">Log Stok</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('inventories.index') }}"
+                                data-i18n="Log Stok">Log Stok</a></li>
                     </ul>
                 </li>
                 {{-- Aplikasi --}}
