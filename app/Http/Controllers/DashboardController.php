@@ -10,16 +10,33 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Ambil data pendapatan dan pengeluaran tahunan
-        $yearlyData = $this->getYearlySummaryData();
-        $dailyData = $this->dailySummary();
-
         $data = [
-            'lastYearData' => $yearlyData,
-            'dailyData' => $dailyData,
+            'lastYearData' => $this->getYearlySummaryData(),
+            'dailyData' => $this->dailySummary(),
+            'todaySummary' => $this->todaySummary(),
         ];
 
         return view('dashboard.index', $data);
+    }
+
+    private function todaySummary()
+    {
+
+
+        $incomeToday = DB::table('sale_items')
+            ->selectRaw("SUM(profit) as total")
+            ->where('created_at', Carbon::today())
+            ->get();
+
+        $expenseToday = DB::table('expenses')
+            ->selectRaw("SUM(amount) as total")
+            ->where('date', Carbon::today())
+            ->get();
+
+        return [
+            'incomeToday' => $incomeToday,
+            'expenseToday' => $expenseToday,
+        ];
     }
 
     private function getYearlySummaryData()
@@ -42,18 +59,24 @@ class DashboardController extends Controller
         $incomeData = [];
         $expenseData = [];
         $categories = [];
+        $incomeDataTotal = 0;
+        $expenseDataTotal = 0;
 
         foreach (range(1, 12) as $m) {
             $monthName = Carbon::create()->month($m)->format('M');
             $categories[] = $monthName;
             $incomeData[] = round($incomePerMonth[$m] ?? 0);
             $expenseData[] = round($expensePerMonth[$m] ?? 0);
+            $incomeDataTotal += $incomeData[count($incomeData) - 1];
+            $expenseDataTotal += $expenseData[count($expenseData) - 1];
         }
 
         return [
             'categories' => $categories,
             'incomeData' => $incomeData,
             'expenseData' => $expenseData,
+            'incomeDataTotal' => $incomeDataTotal,
+            'expenseDataTotal' => $expenseDataTotal,
         ];
     }
 
@@ -80,6 +103,8 @@ class DashboardController extends Controller
         $categories = [];
         $incomeData = [];
         $expenseData = [];
+        $incomeDataTotal = 0;
+        $expenseDataTotal = 0;
 
         foreach (range(0, 6) as $i) {
             $date = Carbon::now()->subDays(6 - $i)->format('Y-m-d');
@@ -88,12 +113,16 @@ class DashboardController extends Controller
             $categories[] = $label;
             $incomeData[] = round($incomePerDay[$date] ?? 0);
             $expenseData[] = round($expensePerDay[$date] ?? 0);
+            $incomeDataTotal += $incomeData[count($incomeData) - 1];
+            $expenseDataTotal += $expenseData[count($expenseData) - 1];
         }
 
         return  [
             'categories' => $categories,
             'incomeData' => $incomeData,
             'expenseData' => $expenseData,
+            'incomeDataTotal' => $incomeDataTotal,
+            'expenseDataTotal' => $expenseDataTotal,
         ];
     }
 }

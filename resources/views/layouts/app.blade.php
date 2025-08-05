@@ -13,6 +13,8 @@
     <link rel="icon" href="{{ asset('dist/assets/images/favicon.svg') }}" type="image/x-icon" />
     <!-- map-vector css -->
     <link rel="stylesheet" href="{{ asset('dist/assets/css/plugins/jsvectormap.min.css') }}" />
+    <!-- data tables css -->
+    <link rel="stylesheet" href="{{ asset('dist/assets/css/plugins/style.css') }}">
     <!-- [Google Font : Public Sans] icon -->
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet" />
@@ -63,6 +65,8 @@
     <script src="{{ asset('dist/assets/js/widgets/earnings-users-chart.js') }}"></script>
     <script src="{{ asset('dist/assets/js/widgets/world-map-markers.js') }}"></script>
     <script src="{{ asset('dist/assets/js/plugins/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('dist/assets/js/plugins/simple-datatables.js') }}"></script>
+    @stack('scripts')
     {{-- <script src="{{ asset('dist/assets/js/elements/ac-alert.js') }}"></script> --}}
     <!--  --><!-- [Page Specific JS] end --><!-- Required Js -->
     <script src="{{ asset('dist/assets/js/plugins/popper.min.js') }}"></script>
@@ -76,6 +80,7 @@
     <script src="{{ asset('dist/assets/js/multi-lang.js') }}"></script>
     <script src="{{ asset('dist/assets/js/plugins/feather.min.js') }}"></script>
     <script src="{{ asset('js/apexcharts.js') }}"></script>
+
     <script>
         layout_change("light");
     </script>

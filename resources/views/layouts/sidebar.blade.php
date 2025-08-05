@@ -17,7 +17,7 @@
                         <span class="pc-badge">1</span></a>
                     <ul class="pc-submenu">
                         <li class="pc-item">
-                            <a class="pc-link" href="../dashboard/index.html" data-i18n="Beranda">Beranda</a>
+                            <a class="pc-link" href="/" data-i18n="Grafik Data">Grafik Data</a>
                         </li>
                     </ul>
                 </li>
@@ -36,7 +36,8 @@
                             </svg></span></a>
                     <ul class="pc-submenu" style="display: block; box-sizing: border-box;">
                         <li class="pc-item"><a class="pc-link" href="#" data-i18n="Uang">Uang</a></li>
-                        <li class="pc-item"><a class="pc-link" href="#" data-i18n="Barang">Barang</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('sales.index') }}"
+                                data-i18n="Barang">Barang</a></li>
                     </ul>
                 </li>
                 <li class="pc-item">

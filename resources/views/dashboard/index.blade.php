@@ -18,11 +18,6 @@
                         </li>
                     </ul>
                 </div>
-                <div class="col-md-12">
-                    <div class="page-header-title">
-                        <h2 class="mb-0">Home</h2>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -33,10 +28,10 @@
                 <div class="card-body">
                     <img src="{{ asset('dist/assets/images/widget/img-status-4.svg') }}" alt="img"
                         class="img-fluid img-bg" />
-                    <h5 class="mb-4">Daily Sales</h5>
+                    <h5 class="mb-4">Penjualan Hari Ini</h5>
                     <div class="d-flex align-items-center mt-3">
                         <h3 class="f-w-300 d-flex align-items-center m-b-0">
-                            $249.95
+                            {{ number_format($todaySummary['incomeToday'][0]->total, 0, ',', '.') ?? 0 }}
                         </h3>
                         <span class="badge bg-light-success ms-2">36%</span>
                     </div>
@@ -44,7 +39,7 @@
                         You made an extra 35,000 this daily
                     </p>
                     <div class="progress" style="height: 7px">
-                        <div class="progress-bar bg-brand-color-3" role="progressbar" style="width: 75%" aria-valuenow="75"
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 75%" aria-valuenow="75"
                             aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
@@ -55,18 +50,18 @@
                 <div class="card-body">
                     <img src="{{ asset('dist/assets/images/widget/img-status-5.svg') }}" alt="img"
                         class="img-fluid img-bg" />
-                    <h5 class="mb-4">Monthly Sales</h5>
+                    <h5 class="mb-4">Pengeluaran Hari Ini</h5>
                     <div class="d-flex align-items-center mt-3">
                         <h3 class="f-w-300 d-flex align-items-center m-b-0">
-                            $249.95
+                            {{ number_format($todaySummary['expenseToday'][0]->total, 0, ',', '.') ?? 0 }}
                         </h3>
-                        <span class="badge bg-light-primary ms-2">20%</span>
+                        <span class="badge bg-light-danger ms-2">20%</span>
                     </div>
                     <p class="text-muted mb-2 text-sm mt-3">
-                        You made an extra 35,000 this Monthly
+                        You made an extra 35,000 this Day
                     </p>
                     <div class="progress" style="height: 7px">
-                        <div class="progress-bar bg-brand-color-3" role="progressbar" style="width: 75%" aria-valuenow="75"
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 75%" aria-valuenow="75"
                             aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
@@ -77,7 +72,7 @@
                 <div class="card-body">
                     <img src="{{ asset('dist/assets/images/widget/img-status-6.svg') }}" alt="img"
                         class="img-fluid img-bg" />
-                    <h5 class="mb-4 text-white">Yearly Sales</h5>
+                    <h5 class="mb-4 text-white">Penjualan Tahunan</h5>
                     <div class="d-flex align-items-center mt-3">
                         <h3 class="text-white f-w-300 d-flex align-items-center m-b-0">
                             $249.95
@@ -113,14 +108,14 @@
                     <div class="row justify-content-center g-3 text-center mb-3">
                         <div class="col-6">
                             <div class="overview-product-legends">
-                                <p class="text-muted mb-1"><span>Profit</span></p>
-                                <h4 class="mb-0">$1935.6</h4>
+                                <p class="text-muted mb-1"><span>Pendapatan</span></p>
+                                <h4 class="mb-0">Rp. {{ number_format($lastYearData['incomeDataTotal'], 2) }}</h4>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="overview-product-legends">
-                                <p class="text-muted mb-1"><span>Expenses</span></p>
-                                <h4 class="mb-0">$468.9</h4>
+                                <p class="text-muted mb-1"><span>Pengeluaran</span></p>
+                                <h4 class="mb-0">Rp. {{ number_format($lastYearData['expenseDataTotal'], 2) }}</h4>
                             </div>
                         </div>
                     </div>
@@ -149,14 +144,14 @@
                     <div class="row justify-content-center g-3 text-center mb-3">
                         <div class="col-6">
                             <div class="overview-product-legends">
-                                <p class="text-muted mb-1"><span>Profit</span></p>
-                                <h4 class="mb-0">$1935.6</h4>
+                                <p class="text-muted mb-1"><span>Pendapatan</span></p>
+                                <h4 class="mb-0">Rp. {{ number_format($dailyData['incomeDataTotal'], 2) }}</h4>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="overview-product-legends">
-                                <p class="text-muted mb-1"><span>Expenses</span></p>
-                                <h4 class="mb-0">$468.9</h4>
+                                <p class="text-muted mb-1"><span>Pengeluaran</span></p>
+                                <h4 class="mb-0">Rp. {{ number_format($dailyData['expenseDataTotal'], 2) }}</h4>
                             </div>
                         </div>
                     </div>
