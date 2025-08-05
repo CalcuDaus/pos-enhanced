@@ -93,78 +93,83 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-xl-7">
+        <div class="col-md-6">
             <div class="card">
-                <div class="card-header">
-                    <h5>Users From United States</h5>
-                </div>
-                <div class="card-body">
-                    <div id="world-map-markers" class="set-map" style="height: 365px"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-xl-5">
-            <div class="card">
-                <div class="card-header d-flex align-items-center justify-content-between py-3">
-                    <h5>Users From United States</h5>
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5>Grafik Tahun 2025</h5>
                     <div class="dropdown">
                         <a class="avtar avtar-xs btn-link-secondary dropdown-toggle arrow-none" href="#"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
-                                class="material-icons-two-tone f-18">more_vert</i></a>
-                        <div class="dropdown-menu dropdown-menu-end">
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons-two-tone f-18">more_vert</i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end" style="">
                             <a class="dropdown-item" href="#">View</a>
                             <a class="dropdown-item" href="#">Edit</a>
                         </div>
                     </div>
+
                 </div>
                 <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="avtar avtar-s bg-light-primary flex-shrink-0">
-                            <i class="ph-duotone ph-money f-20"></i>
+                    <div class="row justify-content-center g-3 text-center mb-3">
+                        <div class="col-6">
+                            <div class="overview-product-legends">
+                                <p class="text-muted mb-1"><span>Profit</span></p>
+                                <h4 class="mb-0">$1935.6</h4>
+                            </div>
                         </div>
-                        <div class="flex-grow-1 ms-3">
-                            <p class="mb-0 text-muted">
-                                Total Earnings
-                            </p>
-                            <h5 class="mb-0">$249.95</h5>
+                        <div class="col-6">
+                            <div class="overview-product-legends">
+                                <p class="text-muted mb-1"><span>Expenses</span></p>
+                                <h4 class="mb-0">$468.9</h4>
+                            </div>
                         </div>
                     </div>
-                    <div id="earnings-users-chart"></div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="d-flex">
-                                <div class="avtar avtar-s bg-light-warning flex-shrink-0">
-                                    <i class="ph-duotone ph-lightning f-20"></i>
-                                </div>
-                                <div class="flex-grow-1 ms-2">
-                                    <p class="mb-0 text-muted">
-                                        Total ideas
-                                    </p>
-                                    <h6 class="mb-0">235</h6>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="d-flex">
-                                <div class="avtar avtar-s bg-light-danger flex-shrink-0">
-                                    <i class="ph-duotone ph-map-pin f-20"></i>
-                                </div>
-                                <div class="flex-grow-1 ms-2">
-                                    <p class="mb-0 text-muted">
-                                        Total location
-                                    </p>
-                                    <h6 class="mb-0">26</h6>
-                                </div>
-                            </div>
-                        </div>
+                    <div id="yearly-summary-chart">
                     </div>
                 </div>
             </div>
         </div>
+        <div class="col-md-6 ">
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5>Grafik 7 Hari Terakhir </h5>
+                    <div class="dropdown">
+                        <a class="avtar avtar-xs btn-link-secondary dropdown-toggle arrow-none" href="#"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons-two-tone f-18">more_vert</i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end" style="">
+                            <a class="dropdown-item" href="#">View</a>
+                            <a class="dropdown-item" href="#">Edit</a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    <div class="row justify-content-center g-3 text-center mb-3">
+                        <div class="col-6">
+                            <div class="overview-product-legends">
+                                <p class="text-muted mb-1"><span>Profit</span></p>
+                                <h4 class="mb-0">$1935.6</h4>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="overview-product-legends">
+                                <p class="text-muted mb-1"><span>Expenses</span></p>
+                                <h4 class="mb-0">$468.9</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="daily-summary-chart">
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <!-- [ Main Content ] end -->
+    <script>
+        const lastYearData = @json($lastYearData);
+        const dailyData = @json($dailyData);
+    </script>
 @endsection

@@ -75,6 +75,7 @@
     <script src="{{ asset('dist/assets/js/theme.js') }}"></script>
     <script src="{{ asset('dist/assets/js/multi-lang.js') }}"></script>
     <script src="{{ asset('dist/assets/js/plugins/feather.min.js') }}"></script>
+    <script src="{{ asset('js/apexcharts.js') }}"></script>
     <script>
         layout_change("light");
     </script>
