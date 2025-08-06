@@ -23,21 +23,26 @@
     </div>
     <!-- [ breadcrumb ] end --><!-- [ Main Content ] start -->
     <form class="row" method="POST"
-        action="{{ $product ? route('products.update', ['product' => Crypt::encrypt($product->id)]) : route('products.store') }}"
+        action="{{ $product ? route('products.update', ['product' => $product->id]) : route('products.store') }}"
         enctype="multipart/form-data">
+        @csrf
         @if ($product)
             @method('PUT')
-            <input type="hidden" name="id" value="{{ Crypt::encrypt($product->id) }}">
         @endif
-        @csrf
-        <input type="hidden" name="param" value="{{ $param }}">
-        <input type="hidden" name="barcode" value="{{ $product ? $product->barcode : strtoupper(Str::random(6)) }}">
+        <input type="hidden" name="barcode"
+            value="{{ $product ? $product->barcode : 'P' . strtoupper(Str::random(4)) . date('His') }}">
         <div class="col-xl-6">
             <div class="card">
                 <div class="card-header">
                     <h5>Deskripsi Produk</h5>
                 </div>
                 <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nama Produk</label>
+                        <input type="text" readonly
+                            value="{{ old('product_code', $product ? $product->product_code : 'P' . strtoupper(Str::random(4)) . date('His')) }}"
+                            class="form-control" name="product_code">
+                    </div>
                     <div class="mb-3">
                         <label class="form-label">Nama Produk</label>
                         <input type="text" value="{{ old('name', $product ? $product->name : '') }}" class="form-control"
@@ -141,7 +146,7 @@
                 <div class="card-body">
                     <div class="mb-3">
                         <label class="form-label">Stok</label>
-                        <input type="text" value="{{ old('stock', $product ? $product->stock : '') }}"
+                        <input type="number" value="{{ old('stock', $product ? $product->stock : '') }}"
                             class="form-control" name="stock" placeholder="Masukkan Stok">
                         @error('stock')
                             <div class="text-danger">{{ $message }}</div>
@@ -152,8 +157,10 @@
         </div>
         <div class="col-sm-12">
             <div class="card">
-                <div class="card-body text-end btn-page"><button class="btn btn-primary mb-0">Simpan Produk</button>
-                    <button class="btn btn-outline-secondary mb-0">Reset</button>
+                <div class="card-body text-end btn-page">
+                    <button type="submit" class="btn btn-primary mb-0">Simpan
+                        Produk</button>
+                    <button type="reset" class="btn btn-outline-secondary mb-0">Reset</button>
                 </div>
             </div>
         </div>

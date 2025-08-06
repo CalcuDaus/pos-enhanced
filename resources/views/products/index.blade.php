@@ -27,8 +27,8 @@
             <div class="card-body">
                 <div class=" p-sm-4 pb-sm-2 d-flex justify-content-between align-items-center">
                     <h4>{{ $title }}</h4>
-                    <a href="{{ route('products.create', ['param' => Crypt::encrypt('add')]) }}" class="btn btn-primary">
-                        <i class="ti ti-plus f-18"></i> Add Product</a>
+                    <a href="{{ route('products.create') }}" class="btn btn-primary">
+                        <i class="ti ti-plus f-18"></i> Tambah Produk</a>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover tbl-product " id="dt-products">
@@ -52,7 +52,7 @@
                                                     alt="{{ $product->image }}" class="wid-40 rounded"></div>
                                             <div class="col">
                                                 <h6 class="mb-1">{{ $product->name }}</h6>
-                                                <p class="text-muted f-12 mb-0">{{ $product->description }}</p>
+                                                <p class="text-muted f-12 mb-0">{{ $product->product_code }}</p>
                                             </div>
                                         </div>
                                     </td>
@@ -69,7 +69,7 @@
                                                             class="ti ti-eye f-18"></i></a></li>
                                                 <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
                                                     aria-label="Edit" data-bs-original-title="Edit"><a
-                                                        href="{{ route('products.create', ['id' => Crypt::encrypt($product->id), 'param' => Crypt::encrypt('edit')]) }}"
+                                                        href="{{ route('products.edit', $product->id) }}"
                                                         class="avtar avtar-xs btn-link-success btn-pc-default"><i
                                                             class="ti ti-edit-circle f-18"></i></a></li>
                                                 <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"

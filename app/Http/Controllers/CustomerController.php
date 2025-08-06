@@ -2,71 +2,85 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $data = [
-            'title' => 'Daftar Pelanggan',
+            'title' => 'Kelola Pelanggan',
             'breadcrumbs' => [
                 ['name' => 'Kelola Pelanggan', 'url' => route('customers.index')],
-                ['name' => 'Pelanggan', 'url' => route('customers.index')],
+                ['name' => 'Daftar Pelanggan', 'url' => route('customers.index')],
             ],
+            'customers' => Customer::all()
         ];
 
         return view('customers.index', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $data = [
+            'title' => 'Tambah Pelanggan',
+            'breadcrumbs' => [
+                ['name' => 'Kelola Pelanggan', 'url' => route('customers.index')],
+                ['name' => 'Tambah Pelanggan', 'url' => route('customers.create')],
+            ],
+            'customer' => null
+        ];
+
+        return view('customers.form', $data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'    => 'required|string|max:255',
+            'phone'   => 'nullable|string|max:20',
+            'email'   => 'nullable|email|max:255',
+            'address' => 'nullable|string'
+        ]);
+
+        Customer::create($request->all());
+
+        return redirect()->route('customers.index')->with('success', 'Pelanggan berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Customer $customer)
     {
-        //
+        $data = [
+            'title' => 'Edit Pelanggan',
+            'breadcrumbs' => [
+                ['name' => 'Kelola Pelanggan', 'url' => route('customers.index')],
+                ['name' => 'Edit Pelanggan', 'url' => route('customers.edit', $customer->id)],
+            ],
+            'customer' => $customer
+        ];
+
+        return view('customers.form', $data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Customer $customer)
     {
-        //
+        $request->validate([
+            'name'    => 'required|string|max:255',
+            'phone'   => 'nullable|string|max:20',
+            'email'   => 'nullable|email|max:255',
+            'address' => 'nullable|string'
+        ]);
+
+        $customer->update($request->all());
+
+        return redirect()->route('customers.index')->with('success', 'Pelanggan berhasil diupdate.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Customer $customer)
     {
-        //
-    }
+        $customer->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('customers.index')->with('success', 'Pelanggan berhasil dihapus.');
     }
 }

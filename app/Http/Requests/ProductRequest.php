@@ -27,6 +27,7 @@ class ProductRequest extends FormRequest
             'description' => 'required|string|max:1000',
             'cost_price' => 'required|numeric|min:0',
             'barcode' => 'required',
+            'product_code' => 'required',
             'price' => 'required|numeric|min:0',
             'image' => 'nullable|image|max:10240',
             'stock' => 'required|integer|min:0',
@@ -37,6 +38,7 @@ class ProductRequest extends FormRequest
         return [
             'name.required' => 'Nama produk harus diisi.',
             'barcode.required' => 'Barcode harus diisi.',
+            'product_code.required' => 'Kode produk harus diisi.',
             'category_id.required' => 'Kategori produk harus dipilih.',
             'description.required' => 'Deskripsi produk harus diisi.',
             'cost_price.required' => 'Harga modal harus diisi.',
