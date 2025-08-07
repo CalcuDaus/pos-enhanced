@@ -5,12 +5,14 @@ namespace App\Models;
 use App\Models\Category;
 use App\Models\SaleItem;
 use App\Models\InventoryLog;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
+    use HasFactory;
     protected $fillable = ['name', 'product_code', 'image', 'barcode', 'category_id', 'description', 'cost_price', 'price', 'stock'];
 
     protected $with = ['category'];

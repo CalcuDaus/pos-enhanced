@@ -37,6 +37,7 @@
                                 <th class="text-end" style="width: 5.181347150259067%;">#</th>
                                 <th style="width: 42.09844559585492%;">DETAIL PRODUK</th>
                                 <th style="width: 20.984455958549223%;">KATEGORI</th>
+                                <th class="text-end" style="width: 7.772020725388601%;">HARGA MODAL</th>
                                 <th class="text-end" style="width: 7.772020725388601%;">HARGA</th>
                                 <th class="text-end" style="width: 5.829015544041451%;">STOK</th>
                                 <th class="text-end" style="width: 5.829015544041451%;">BARCODE</th>
@@ -57,6 +58,7 @@
                                         </div>
                                     </td>
                                     <td>{{ $product->category->name }}</td>
+                                    <td class="text-end">Rp.{{ number_format($product->cost_price, 2) }}</td>
                                     <td class="text-end">Rp.{{ number_format($product->price, 2) }}</td>
                                     <td class="text-end">{{ $product->stock }}</td>
                                     <td class="text-end">{!! DNS1D::getBarcodeHTML($product->barcode, 'C128') !!}

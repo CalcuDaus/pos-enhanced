@@ -23,10 +23,11 @@ class DashboardController extends Controller
     {
 
 
-        $incomeToday = DB::table('sale_items')
-            ->selectRaw("SUM(profit) as total")
-            ->where('created_at', Carbon::today())
+        $incomeToday = DB::table('incomes')
+            ->selectRaw("SUM(amount) as total")
+            ->where('date', Carbon::today())
             ->get();
+
 
         $expenseToday = DB::table('expenses')
             ->selectRaw("SUM(amount) as total")
@@ -41,11 +42,16 @@ class DashboardController extends Controller
 
     private function getYearlySummaryData()
     {
-        // Pendapatan per bulan
-        $incomePerMonth = DB::table('sale_items')
-            ->selectRaw("MONTH(created_at) as month, SUM(profit) as total")
-            ->whereYear('created_at', now()->year)
-            ->groupBy(DB::raw('MONTH(created_at)'))
+        // // Pendapatan per bulan
+        // $incomePerMonth = DB::table('sale_items')
+        //     ->selectRaw("MONTH(created_at) as month, SUM(profit) as total")
+        //     ->whereYear('created_at', now()->year)
+        //     ->groupBy(DB::raw('MONTH(created_at)'))
+        //     ->pluck('total', 'month');
+        $incomePerMonth = DB::table('incomes')
+            ->selectRaw("MONTH(date) as month, SUM(amount) as total")
+            ->whereYear('date', now()->year)
+            ->groupBy(DB::raw('MONTH(date)'))
             ->pluck('total', 'month');
 
         // Pengeluaran per bulan
@@ -86,10 +92,16 @@ class DashboardController extends Controller
         $end = Carbon::now()->endOfDay();
 
         // Pendapatan harian
-        $incomePerDay = DB::table('sale_items')
-            ->selectRaw("DATE(created_at) as date, SUM(profit) as total")
-            ->whereBetween('created_at', [$start, $end])
-            ->groupBy(DB::raw("DATE(created_at)"))
+        // $incomePerDay = DB::table('sale_items')
+        //     ->selectRaw("DATE(created_at) as date, SUM(profit) as total")
+        //     ->whereBetween('created_at', [$start, $end])
+        //     ->groupBy(DB::raw("DATE(created_at)"))
+        //     ->pluck('total', 'date');
+
+        $incomePerDay = DB::table('incomes')
+            ->selectRaw("DATE(date) as date, SUM(amount) as total")
+            ->whereBetween('date', [$start, $end])
+            ->groupBy(DB::raw("DATE(date)"))
             ->pluck('total', 'date');
 
         // Pengeluaran harian
