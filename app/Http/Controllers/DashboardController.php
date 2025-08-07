@@ -34,6 +34,7 @@ class DashboardController extends Controller
             ->where('date', Carbon::today())
             ->get();
 
+
         return [
             'incomeToday' => $incomeToday,
             'expenseToday' => $expenseToday,

@@ -31,7 +31,7 @@
                     <h5 class="mb-4">Penjualan Hari Ini</h5>
                     <div class="d-flex align-items-center mt-3">
                         <h3 class="f-w-300 d-flex align-items-center m-b-0">
-                            {{ number_format($todaySummary['incomeToday'][0]->total, 0, ',', '.') ?? 0 }}
+                            Rp. {{ number_format($todaySummary['incomeToday'][0]->total, 0, ',', '.') ?? 0 }}
                         </h3>
                         <span class="badge bg-light-success ms-2">36%</span>
                     </div>
@@ -53,7 +53,7 @@
                     <h5 class="mb-4">Pengeluaran Hari Ini</h5>
                     <div class="d-flex align-items-center mt-3">
                         <h3 class="f-w-300 d-flex align-items-center m-b-0">
-                            {{ number_format($todaySummary['expenseToday'][0]->total, 0, ',', '.') ?? 0 }}
+                            Rp. {{ number_format($todaySummary['expenseToday'][0]->total, 0, ',', '.') ?? 0 }}
                         </h3>
                         <span class="badge bg-light-danger ms-2">20%</span>
                     </div>
@@ -72,10 +72,11 @@
                 <div class="card-body">
                     <img src="{{ asset('dist/assets/images/widget/img-status-6.svg') }}" alt="img"
                         class="img-fluid img-bg" />
-                    <h5 class="mb-4 text-white">Penjualan Tahunan</h5>
+                    <h5 class="mb-4 text-white">Bersih Hari Ini</h5>
                     <div class="d-flex align-items-center mt-3">
                         <h3 class="text-white f-w-300 d-flex align-items-center m-b-0">
-                            $249.95
+                            Rp.
+                            {{ number_format($todaySummary['incomeToday'][0]->total - $todaySummary['expenseToday'][0]->total, 0, ',', '.') ?? 0 }}
                         </h3>
                     </div>
                     <p class="text-white text-opacity-75 mb-2 text-sm mt-3">
