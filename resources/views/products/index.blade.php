@@ -61,7 +61,7 @@
                                     <td class="text-end">Rp.{{ number_format($product->cost_price, 2) }}</td>
                                     <td class="text-end">Rp.{{ number_format($product->price, 2) }}</td>
                                     <td class="text-end">{{ $product->stock }}</td>
-                                    <td class="text-end">{!! DNS1D::getBarcodeHTML($product->barcode, 'C128') !!}
+                                    <td class="text-end">{!! DNS1D::getBarcodeHTML($product->barcode, 'C39') !!}
                                         <div class="prod-action-links">
                                             <ul class="list-inline me-auto mb-0">
                                                 <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"

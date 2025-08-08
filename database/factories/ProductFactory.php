@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Category;
+use Milon\Barcode\DNS1D;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -37,19 +38,21 @@ class ProductFactory extends Factory
             'Kalkulator Casio'
         ]);
 
+
+
         // Cost price dulu
         $cost = $this->faker->numberBetween(500, 50000);
 
         return [
             'name' => $namaBarang,
-            'product_code' => 'P' . strtoupper(Str::random(4)) . date('His'),
+            'product_code' => rand(1000, 999999) . date('His'),
             'cost_price' => $cost,
             'price' => $this->faker->numberBetween($cost + 500, $cost + 50000),
             'image' => 'dummy-image.png',
             // Pilih kategori yang sudah ada di database
             'category_id' => Category::inRandomOrder()->first()->id,
             'stock' => $this->faker->numberBetween(1, 100),
-            'barcode' => 'P' . strtoupper(Str::random(4)) . date('His'),
+            'barcode' => rand(10, 999) . date('His'),
             'description' => $this->faker->sentence(),
         ];
     }
