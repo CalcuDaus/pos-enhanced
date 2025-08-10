@@ -111,44 +111,144 @@
             if (datatable) {
                 new simpleDatatables.DataTable(datatable);
             }
+            // ==== 1. DATA & STATE ====
             const checkoutList = document.getElementById('checkout-list');
             const totalPriceEl = document.getElementById('total-price');
-            const addedItems = {};
+            const barcodeInput = document.getElementById('barcode-input');
 
-            const productMap = new Map();
-            @foreach ($products as $product)
-                productMap.set("{{ $product->barcode }}", {
-                    id: "{{ $product->id }}",
-                    name: "{{ $product->name }}",
-                    price: {{ $product->price }}
-                });
-            @endforeach
+            const currencyFormatter = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                maximumFractionDigits: 0
+            });
+
+            // products di-pass dari Blade
+            const products = {!! json_encode(
+                $products->map(function ($p) {
+                        return [
+                            'id' => $p->id,
+                            'barcode' => $p->barcode,
+                            'name' => $p->name,
+                            'price' => $p->price,
+                        ];
+                    })->toArray(),
+            ) !!};
+            const productMap = new Map(products.map(p => [p.barcode, p]));
+            const addedItems = new Map(); // key: id, value: { name, price, qty }
+
+            // ==== 2. HELPER ====
+            function escapeHtml(unsafe) {
+                return unsafe.replace(/[&<>"']/g, m => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                } [m]));
+            }
 
             function formatRupiah(num) {
-                return "Rp." + num.toLocaleString();
+                return currencyFormatter.format(num);
             }
 
             function updateTotal() {
                 let total = 0;
-                Object.keys(addedItems).forEach(function(id) {
-                    const qty = parseInt(document.getElementById(`qty-${id}`).value);
-                    const price = parseFloat(addedItems[id].price);
-                    total += qty * price;
-                });
+                for (const [, item] of addedItems) {
+                    total += item.price * item.qty;
+                }
                 totalPriceEl.textContent = formatRupiah(total);
             }
 
-            document.querySelectorAll('.btn-add-to-checkout').forEach(function(button) {
-                button.addEventListener('click', function() {
-                    const id = this.dataset.id;
-                    const name = this.dataset.name;
-                    const price = parseFloat(this.dataset.price);
-                    addToCheckout(id, name, price);
+            // ==== 3. DOM RENDER ====
+            function renderItem(id, name, price, qty = 1) {
+                const wrapper = document.createElement('div');
+                wrapper.id = `item-${id}`;
+                wrapper.className = "list-group-item d-flex justify-content-between align-items-center";
+                wrapper.innerHTML = `
+            <div class="d-flex align-items-center">
+                <span class="me-2" style="min-width: 170px;">${escapeHtml(name)}</span>
+                <div class="btn-group btn-group-sm mb-0 border" role="group">
+                    <button type="button" class="btn btn-link-secondary btn-decrease" data-id="${id}">
+                        <i class="ti ti-minus"></i>
+                    </button>
+                    <input readonly class="wid-45 text-center border-0 m-0 form-control rounded-0 shadow-none"
+                           type="text" id="qty-${id}" value="${qty}">
+                    <button type="button" class="btn btn-link-secondary btn-increase" data-id="${id}">
+                        <i class="ti ti-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <span class="badge bg-primary rounded-pill">${formatRupiah(price)}</span>
+            <input type="hidden" name="items[${id}][product_id]" value="${id}">
+            <input type="hidden" name="items[${id}][quantity]" value="${qty}" id="input-qty-${id}">
+        `;
+                checkoutList.appendChild(wrapper);
+            }
+
+            function removeItem(id) {
+                const el = document.getElementById(`item-${id}`);
+                if (el) el.remove();
+            }
+
+            // ==== 4. LOGIC ====
+            function addToCheckout(id, name, price) {
+                if (addedItems.has(id)) {
+                    incrementQuantity(id);
+                    return;
+                }
+                addedItems.set(id, {
+                    name,
+                    price,
+                    qty: 1
                 });
+                renderItem(id, name, price);
+                updateTotal();
+            }
+
+            function incrementQuantity(id) {
+                const item = addedItems.get(id);
+                if (!item) return;
+                item.qty++;
+                document.getElementById(`qty-${id}`).value = item.qty;
+                document.getElementById(`input-qty-${id}`).value = item.qty;
+                updateTotal();
+            }
+
+            function decreaseQuantity(id) {
+                const item = addedItems.get(id);
+                if (!item) return;
+                item.qty--;
+                if (item.qty <= 0) {
+                    addedItems.delete(id);
+                    removeItem(id);
+                } else {
+                    document.getElementById(`qty-${id}`).value = item.qty;
+                    document.getElementById(`input-qty-${id}`).value = item.qty;
+                }
+                updateTotal();
+            }
+
+            function resetCheckout() {
+                checkoutList.innerHTML = '';
+                addedItems.clear();
+                updateTotal();
+            }
+
+            // ==== 5. EVENT HANDLING ====
+            // Delegasi untuk tombol + dan -
+            checkoutList.addEventListener("click", function(e) {
+                const btnInc = e.target.closest(".btn-increase");
+                const btnDec = e.target.closest(".btn-decrease");
+
+                if (btnInc) incrementQuantity(btnInc.dataset.id);
+                if (btnDec) decreaseQuantity(btnDec.dataset.id);
             });
 
-            const barcodeInput = document.getElementById("barcode-input");
-            barcodeInput.addEventListener("keypress", function(e) {
+            // Tombol reset
+            document.getElementById('btn-reset-checkout').addEventListener('click', resetCheckout);
+
+            // Input barcode
+            barcodeInput.addEventListener("keydown", function(e) {
                 if (e.key === "Enter") {
                     e.preventDefault();
                     const code = barcodeInput.value.trim();
@@ -156,91 +256,26 @@
                         const product = productMap.get(code);
                         addToCheckout(product.id, product.name, product.price);
                     } else {
-                        alert("Produk dengan barcode tersebut tidak ditemukan.");
+                        Swal.fire({
+                            icon: "error",
+                            delay: 1000,
+                            title: "Oops...",
+                            text: "Produk dengan barcode tersebut tidak ditemukan.",
+                        });
                     }
                     barcodeInput.value = "";
                 }
             });
 
-            function addToCheckout(id, name, price) {
-                if (addedItems[id]) {
-                    incrementQuantity(id);
-                } else {
-                    const wrapper = document.createElement('div');
-                    wrapper.className = "list-group-item d-flex justify-content-between align-items-center";
-                    wrapper.id = `item-${id}`;
-                    wrapper.innerHTML = `
-                <div class="d-flex align-items-center">
-                    <span class="me-2" style="min-width: 170px;">${name}</span>
-                    <div class="btn-group btn-group-sm mb-0 border" role="group">
-                        <button type="button" class="btn btn-link-secondary btn-decrease" data-id="${id}">
-                            <i class="ti ti-minus"></i>
-                        </button>
-                        <input readonly class="wid-45 text-center border-0 m-0 form-control rounded-0 shadow-none" 
-                               type="text" id="qty-${id}" value="1">
-                        <button type="button" class="btn btn-link-secondary btn-increase" data-id="${id}">
-                            <i class="ti ti-plus"></i>
-                        </button>
-                    </div>
-                </div>
-                <span class="badge bg-primary rounded-pill">${formatRupiah(price)}</span>
-
-                <input type="hidden" name="items[${id}][product_id]" value="${id}">
-                <input type="hidden" name="items[${id}][quantity]" value="1" id="input-qty-${id}">
-            `;
-                    checkoutList.appendChild(wrapper);
-                    addedItems[id] = {
-                        price: price
-                    };
-                    updateTotal();
-                }
-            }
-
-            function incrementQuantity(id) {
-                const qtyInput = document.getElementById(`qty-${id}`);
-                const hiddenInput = document.getElementById(`input-qty-${id}`);
-                const qty = parseInt(qtyInput.value) + 1;
-                qtyInput.value = qty;
-                hiddenInput.value = qty;
-                updateTotal();
-            }
-
-            function decreaseQuantity(id) {
-                const qtyInput = document.getElementById(`qty-${id}`);
-                const hiddenInput = document.getElementById(`input-qty-${id}`);
-                const qty = parseInt(qtyInput.value) - 1;
-
-                if (qty <= 0) {
-                    const item = document.getElementById(`item-${id}`);
-                    checkoutList.removeChild(item);
-                    delete addedItems[id];
-                } else {
-                    qtyInput.value = qty;
-                    hiddenInput.value = qty;
-                }
-                updateTotal();
-            }
-
-            checkoutList.addEventListener("click", function(e) {
-                if (e.target.closest(".btn-increase")) {
-                    const id = e.target.closest(".btn-increase").dataset.id;
-                    incrementQuantity(id);
-                } else if (e.target.closest(".btn-decrease")) {
-                    const id = e.target.closest(".btn-decrease").dataset.id;
-                    decreaseQuantity(id);
-                }
+            // Tombol add manual (class .btn-add-to-checkout)
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest('.btn-add-to-checkout');
+                if (!btn) return;
+                addToCheckout(btn.dataset.id, btn.dataset.name, parseFloat(btn.dataset.price));
             });
 
-            document.getElementById('btn-reset-checkout').addEventListener('click', function() {
-                checkoutList.innerHTML = '';
-                for (let key in addedItems) {
-                    delete addedItems[key];
-                }
-                updateTotal();
-            });
-
+            // Fokus awal ke barcode input
             window.addEventListener("load", () => barcodeInput.focus());
-            // document.addEventListener("click", () => barcodeInput.focus());
         });
     </script>
 @endpush
