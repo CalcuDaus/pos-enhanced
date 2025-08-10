@@ -2,12 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SaleController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\SaleController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryStockController;
+
 
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
 
@@ -24,4 +27,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('customers', CustomerController::class);
     Route::resource('inventories', InventoryStockController::class);
+    Route::resource('accounts', AccountController::class);
+    Route::resource('users', UserController::class);
 });

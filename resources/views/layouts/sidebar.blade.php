@@ -1,7 +1,7 @@
 <nav class="pc-sidebar">
     <div class="navbar-wrapper">
         <div class="m-header">
-            <a href="../dashboard/index.html"
+            <a href="{{ route('dashboard.index') }}"
                 class="b-brand text-primary d-flex align-items-center gap-2"><!-- ========   Change your logo from here   ============ -->
                 <img src="{{ asset('img/logo-POS.png') }}" alt="logo image" width="50px" />
                 <span style="font-family: poppins;font-weight: 700;font-size: 1.3rem;"class="mt-2">Point Of
@@ -46,47 +46,52 @@
                             data-i18n="Utang">Utang</span></a>
                 </li>
 
-                <li class="pc-item pc-caption">
-                    <label data-i18n="Master Kelola">Master Kelola</label>
-                    <i class="ph-duotone ph-chart-pie"></i>
-                </li>
-                {{-- Produk --}}
-                <li class="pc-item pc-hasmenu"><a href="#!" class="pc-link"><span class="pc-micon"><i
-                                class="ph-duotone ph-wall"></i> </span><span class="pc-mtext"
-                            data-i18n="Produk">Produk</span><span class="pc-arrow"><svg
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="feather feather-chevron-right">
-                                <polyline points="9 18 15 12 9 6"></polyline>
-                            </svg></span></a>
-                    <ul class="pc-submenu" style="display: block; box-sizing: border-box;">
-                        <li class="pc-item"><a class="pc-link" href="{{ route('products.index') }}"
-                                data-i18n="Produk">Produk</a></li>
-                        <li class="pc-item"><a class="pc-link" href="{{ route('categories.index') }}"
-                                data-i18n="Kategori">Kategori</a></li>
-                        <li class="pc-item"><a class="pc-link" href="{{ route('customers.index') }}"
-                                data-i18n="Pelanggan">Pelanggan</a>
-                        </li>
-                        <li class="pc-item"><a class="pc-link" href="{{ route('inventories.index') }}"
-                                data-i18n="Log Stok">Log Stok</a></li>
-                    </ul>
-                </li>
-                {{-- Aplikasi --}}
-                <li class="pc-item pc-hasmenu"><a href="#!" class="pc-link"><span class="pc-micon"><i
-                                class="ph-duotone ph-gear"></i> </span><span class="pc-mtext"
-                            data-i18n="Aplikasi">Aplikasi</span><span class="pc-arrow"><svg
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="feather feather-chevron-right">
-                                <polyline points="9 18 15 12 9 6"></polyline>
-                            </svg></span></a>
-                    <ul class="pc-submenu" style="display: block; box-sizing: border-box;">
-                        <li class="pc-item"><a class="pc-link" href="#" data-i18n="Retail">Retail</a></li>
-                        <li class="pc-item"><a class="pc-link" href="#" data-i18n="Pengguna">Pengguna</a></li>
-                        <li class="pc-item"><a class="pc-link" href="#" data-i18n="Rekening">Rekening</a>
-                        </li>
-                    </ul>
-                </li>
+                @if (auth()->user()->role === 'admin')
+                    <li class="pc-item pc-caption">
+                        <label data-i18n="Master Kelola">Master Kelola</label>
+                        <i class="ph-duotone ph-chart-pie"></i>
+                    </li>
+                    {{-- Produk --}}
+                    <li class="pc-item pc-hasmenu"><a href="#!" class="pc-link"><span class="pc-micon"><i
+                                    class="ph-duotone ph-wall"></i> </span><span class="pc-mtext"
+                                data-i18n="Produk">Produk</span><span class="pc-arrow"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-chevron-right">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg></span></a>
+                        <ul class="pc-submenu" style="display: block; box-sizing: border-box;">
+                            <li class="pc-item"><a class="pc-link" href="{{ route('products.index') }}"
+                                    data-i18n="Produk">Produk</a></li>
+                            <li class="pc-item"><a class="pc-link" href="{{ route('categories.index') }}"
+                                    data-i18n="Kategori">Kategori</a></li>
+                            <li class="pc-item"><a class="pc-link" href="{{ route('customers.index') }}"
+                                    data-i18n="Pelanggan">Pelanggan</a>
+                            </li>
+                            <li class="pc-item"><a class="pc-link" href="{{ route('inventories.index') }}"
+                                    data-i18n="Log Stok">Log Stok</a></li>
+                        </ul>
+                    </li>
+                    {{-- Aplikasi --}}
+                    <li class="pc-item pc-hasmenu"><a href="#!" class="pc-link"><span class="pc-micon"><i
+                                    class="ph-duotone ph-gear"></i> </span><span class="pc-mtext"
+                                data-i18n="Aplikasi">Aplikasi</span><span class="pc-arrow"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-chevron-right">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg></span></a>
+                        <ul class="pc-submenu" style="display: block; box-sizing: border-box;">
+                            <li class="pc-item"><a class="pc-link" href="#" data-i18n="Retail">Retail</a></li>
+                            <li class="pc-item"><a class="pc-link" href="{{ route('users.index') }}"
+                                    data-i18n="Pengguna">Pengguna</a></li>
+                            <li class="pc-item"><a class="pc-link" href="{{ route('accounts.index') }}"
+                                    data-i18n="Rekening">Rekening</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
             </ul>
             <div class="card nav-action-card bg-brand-color-4">
                 <div class="card-body"
@@ -115,8 +120,8 @@
                                 aria-expanded="false" data-bs-offset="0,20">
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1 me-2">
-                                        <h6 class="mb-0">Jonh Smith</h6>
-                                        <small>Administrator</small>
+                                        <h6 class="mb-0">{{ Auth::user()->name }}</h6>
+                                        <small>{{ Auth::user()->role }}</small>
                                     </div>
                                     <div class="flex-shrink-0">
                                         <div class="btn btn-icon btn-link-secondary avtar">

@@ -49,7 +49,6 @@ class ProductFactory extends Factory
             'cost_price' => $cost,
             'price' => $this->faker->numberBetween($cost + 500, $cost + 50000),
             'image' => 'dummy-image.png',
-            // Pilih kategori yang sudah ada di database
             'category_id' => Category::inRandomOrder()->first()->id,
             'stock' => $this->faker->numberBetween(1, 100),
             'barcode' => rand(10, 999) . date('His'),

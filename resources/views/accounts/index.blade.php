@@ -28,35 +28,40 @@
             <div class="card-body">
                 <div class="p-sm-4 pb-sm-2 d-flex justify-content-between align-items-center">
                     <h4>{{ $title }}</h4>
-                    <a href="{{ route('categories.create') }}" class="btn btn-primary">
-                        <i class="ti ti-plus f-18"></i> Tambah Kategori
+                    <a href="{{ route('accounts.create') }}" class="btn btn-primary">
+                        <i class="ti ti-plus f-18"></i> Tambah Rekening
                     </a>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover tbl-product" id="dt-categories">
+                    <table class="table table-hover tbl-product" id="dt-accounts">
                         <thead>
                             <tr>
-                                <th style="width: 10%;">#</th>
-                                <th>Nama Kategori</th>
-                                {{-- <th style="width: 20%;" class="text-end">Aksi</th> --}}
+                                <th>#</th>
+                                <th>Logo</th>
+                                <th>Nama Rekening</th>
+                                <th>Saldo</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($categories as $category)
+                            @forelse ($accounts as $account)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $category->name }}
+                                    <td>
+                                        <img src="{{ asset('storage/' . $account->image) }}" alt="{{ $account->image }}"
+                                            class="wid-40 rounded">
+                                    </td>
+                                    <td>{{ $account->account_name }}</td>
+                                    <td>Rp {{ number_format($account->balance, 2, ',', '.') }}
                                         <div class="prod-action-links">
                                             <ul class="list-inline me-auto mb-0">
                                                 <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
                                                     aria-label="Edit" data-bs-original-title="Edit"><a
-                                                        href="{{ route('categories.edit', $category->id) }}"
+                                                        href="{{ route('accounts.edit', $account->id) }}"
                                                         class="avtar avtar-xs btn-link-success btn-pc-default"><i
                                                             class="ti ti-edit-circle f-18"></i></a></li>
                                                 <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
                                                     aria-label="Delete" data-bs-original-title="Delete">
-                                                    <form
-                                                        action="{{ route('categories.destroy', Crypt::encrypt($category->id)) }}"
+                                                    <form action="{{ route('accounts.destroy', $account->id) }}"
                                                         method="post">
                                                         @csrf
                                                         @method('DELETE')
@@ -71,7 +76,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="text-center">Tidak ada kategori yang ditemukan.</td>
+                                    <td colspan="5" class="text-center">Tidak ada rekening yang ditemukan.</td>
                                 </tr>
                             @endforelse
                         </tbody>
