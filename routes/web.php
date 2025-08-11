@@ -26,7 +26,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('customers', CustomerController::class);
-    Route::resource('inventories', InventoryStockController::class);
     Route::resource('accounts', AccountController::class);
     Route::resource('users', UserController::class);
+    Route::get('inventories', [InventoryStockController::class, 'index'])->name('inventories.index');
 });

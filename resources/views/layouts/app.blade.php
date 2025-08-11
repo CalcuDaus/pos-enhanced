@@ -31,6 +31,7 @@
     <!-- [Template CSS Files] -->
     <link rel="stylesheet" href="{{ asset('dist/assets/css/style.css') }}" id="main-style-link" />
     <link rel="stylesheet" href="{{ asset('dist/assets/css/style-preset.css') }}" />
+
 </head><!-- [Head] end --><!-- [Body] Start -->
 
 <body data-pc-preset="preset-1" data-pc-sidebar-theme="light" data-pc-sidebar-caption="true" data-pc-direction="ltr"
@@ -66,6 +67,7 @@
     <script src="{{ asset('dist/assets/js/widgets/world-map-markers.js') }}"></script>
     <script src="{{ asset('dist/assets/js/plugins/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('dist/assets/js/plugins/simple-datatables.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qz-tray@2.1.1/qz-tray.js"></script>
     @stack('scripts')
     {{-- <script src="{{ asset('dist/assets/js/elements/ac-alert.js') }}"></script> --}}
     <!--  --><!-- [Page Specific JS] end --><!-- Required Js -->

@@ -6,6 +6,7 @@ use App\Models\Sale;
 use App\Models\Income;
 use App\Models\Product;
 use App\Models\SaleItem;
+use App\Models\InventoryLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -88,6 +89,13 @@ class SaleController extends Controller
             Income::create([
                 'date' => now()->toDateString(),
                 'amount' => $totalProfit
+            ]);
+            InventoryLog::create([
+                'product_id' => $product->id,
+                'change_type' => 'sale',
+                'quantity' => $product->stock,
+                'note' => 'Produk diJual',
+                'created_at' => now(),
             ]);
 
             DB::commit();

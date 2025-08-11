@@ -31,7 +31,7 @@
                         <i class="ti ti-plus f-18"></i> Tambah Produk</a>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover tbl-product " id="dt-products">
+                    <table class="table table-hover tbl-product " id="dt-products-2">
                         <thead>
                             <tr>
                                 <th class="text-end" style="width: 5.181347150259067%;">#</th>
@@ -103,3 +103,11 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        const datatable = document.querySelector('#dt-products-2');
+        if (datatable) {
+            new simpleDatatables.DataTable(datatable);
+        }
+    </script>
+@endpush

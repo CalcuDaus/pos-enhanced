@@ -48,10 +48,10 @@ class ProductFactory extends Factory
             'product_code' => rand(1000, 999999) . date('His'),
             'cost_price' => $cost,
             'price' => $this->faker->numberBetween($cost + 500, $cost + 50000),
-            'image' => 'dummy-image.png',
+            'image' => 'products/dummy-image.png',
             'category_id' => Category::inRandomOrder()->first()->id,
             'stock' => $this->faker->numberBetween(1, 100),
-            'barcode' => rand(10, 999) . date('His'),
+            'barcode' => strtoupper(substr(md5(uniqid()), 0, 6)),
             'description' => $this->faker->sentence(),
         ];
     }

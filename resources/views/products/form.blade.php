@@ -29,14 +29,18 @@
         @if ($product)
             @method('PUT')
         @endif
-        <input type="hidden" name="barcode"
-            value="{{ $product ? $product->barcode : 'P' . strtoupper(Str::random(4)) . date('His') }}">
         <div class="col-xl-6">
             <div class="card">
                 <div class="card-header">
                     <h5>Deskripsi Produk</h5>
                 </div>
                 <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Kode Produk</label>
+                        <input type="text"
+                            value="{{ old('barcode', $product ? $product->barcode : strtoupper(substr(md5(uniqid()), 0, 6))) }}"
+                            class="form-control" name="barcode">
+                    </div>
                     <div class="mb-3">
                         <label class="form-label">Nama Produk</label>
                         <input type="text" readonly

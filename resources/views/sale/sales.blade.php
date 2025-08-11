@@ -7,7 +7,7 @@
                 <div class="col-md-12">
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="../dashboard/index.html">Home</a>
+                            <a href="{{ route('dashboard.index') }}">Home</a>
                         </li>
                         <li class="breadcrumb-item">
                             <a href="javascript: void(0)">Penjualan</a>
@@ -86,7 +86,8 @@
                     </div>
                     <form method="POST" action="{{ route('sales.store') }}" id="checkout-form">
                         @csrf
-                        <div id="checkout-list" class="list-group list-group-flush mb-3">
+                        <div id="checkout-list" class="list-group list-group-flush mb-3"
+                            style="max-height: 420px; overflow-y: auto;">
 
                         </div>
                         <div class="d-flex justify-content-between align-items-center mt-3 mb-2">
@@ -95,14 +96,54 @@
                         </div>
                         <div class="d-flex justify-content-end gap-2 align-items-center mt-3 mb-2">
                             <button type="button" class="btn btn-danger btn-block  " id="btn-reset-checkout">Reset</button>
-                            <button type="submit" class="btn btn-primary btn-block ">Checkout</button>
+                            <button type="button" id="btn-checkout" class="btn btn-primary btn-block">Checkout</button>
+
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
+    <!-- Modal Checkout -->
+    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="checkoutModalLabel">Konfirmasi Pembayaran</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between">
+                        <span>Total Belanja:</span>
+                        <strong id="modal-total">Rp 0</strong>
+                    </div>
+                    <div class="mt-3">
+                        <label>Nama Customer</label>
+                        <input type="text" class="form-control" name="customer_name" value="umum">
+                    </div>
+                    <div class="mt-3">
+                        <label>Nominal Bayar</label>
+                        <input type="number" class="form-control" id="nominal-bayar" value="0">
+                    </div>
+                    <div class="mt-3">
+                        <label>Kembalian:</label>
+                        <strong id="modal-kembalian">Rp 0</strong>
+                    </div>
+                    <div class="mt-3">
+                        <label>Metode Pembayaran</label>
+                        <select class="form-select" name="payment_method">
+                            <option value="Tunai">Tunai</option>
+                            <option value="QRIS">QRIS</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" id="btn-modal-bayar" class="btn btn-success">Bayar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @push('scripts')
     <script>
@@ -120,6 +161,80 @@
                 style: 'currency',
                 currency: 'IDR',
                 maximumFractionDigits: 0
+            });
+            // Ketika klik tombol checkout
+            document.getElementById('btn-checkout').addEventListener('click', function() {
+                // Ambil total belanja dari elemen
+                const totalText = document.getElementById('total-price').textContent;
+                const totalValue = parseInt(totalText.replace(/[^0-9]/g, ''));
+
+                // Set total di modal
+                document.getElementById('modal-total').textContent = totalText;
+
+                // Reset input bayar & kembalian
+                document.getElementById('nominal-bayar').value = totalValue;
+                document.getElementById('modal-kembalian').textContent = 'Rp 0';
+
+                // Tampilkan modal
+                const modal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+                modal.show();
+
+                // Hitung kembalian otomatis
+                document.getElementById('nominal-bayar').addEventListener('input', function() {
+                    const bayar = parseInt(this.value) || 0;
+                    const kembalian = bayar - totalValue;
+                    document.getElementById('modal-kembalian').textContent = formatRupiah(
+                        kembalian > 0 ? kembalian : 0);
+                });
+            });
+
+            // Ketika klik tombol bayar di modal
+            document.getElementById('btn-modal-bayar').addEventListener('click', function() {
+                document.getElementById('checkout-form').submit();
+
+                // 2. Ambil data dari checkout untuk struk
+                let receiptHtml = `
+        <div style="font-family: monospace; padding:2px; width:240px;">
+            <h3 style="text-align:center;">TOKO SAYA</h3>
+             <div style="display:flex;align-items:center;gap:2px;">
+                <img src="{{ asset('img/logo-POS.png') }}" alt="logo image" width="50px" />
+                <span style="font-family: poppins;font-weight: 700;font-size: 1.3rem;"class="mt-2">Point Of
+                    Sales</span>
+            </div>
+            <p style="text-align:center;">Jl. Contoh No.1</p>
+            <hr>
+            <table style="width:90%; font-size:13px;">
+    `;
+                addedItems.forEach(item => {
+                    receiptHtml += `
+            <tr style="height: 30px;">
+                <td>${item.name} x${item.qty}</td>
+                <td style="text-align:right;">${formatRupiah(item.price * item.qty)}</td>
+            </tr>
+        `;
+                });
+                receiptHtml += `
+            </table>
+            <hr>
+            <p>Total: <strong>${totalPriceEl.textContent}</strong></p>
+            <p>Bayar: ${formatRupiah(parseInt(document.getElementById('nominal-bayar').value) || 0)}</p>
+            <p>Kembalian: ${document.getElementById('modal-kembalian').textContent}</p>
+            <p style="text-align:center;font-size:15px;font-weight:bold;">Terima kasih</p>
+            <p style="text-align:center;">Senang menunggumu kembali ketoko kami!</p>
+        </div>
+    `;
+
+                // 3. Buka jendela print
+                let w = window.open('', '_blank');
+                w.document.write(`
+        <html>
+        <head><title>Cetak Struk</title></head>
+        <body onload="window.print(); window.close();">
+            ${receiptHtml}
+        </body>
+        </html>
+    `);
+                w.document.close();
             });
 
             // products di-pass dari Blade
@@ -184,6 +299,7 @@
         `;
                 checkoutList.appendChild(wrapper);
             }
+
 
             function removeItem(id) {
                 const el = document.getElementById(`item-${id}`);

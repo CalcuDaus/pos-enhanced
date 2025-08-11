@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class InventoryLog extends Model
 {
-    protected $fillable = ['product_id', 'change_type', 'quantity', 'note'];
+    protected $fillable = ['product_id', 'change_type', 'quantity', 'note', 'created_at'];
+
+    public $timestamps = false;
 
     public function product(): BelongsTo
     {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use App\Http\Requests\ProductRequest;
+use App\Models\InventoryLog;
 
 class ProductController extends Controller
 {
@@ -44,9 +45,17 @@ class ProductController extends Controller
             $validatedData['image'] = $request->file('image')->store('products', 'public');
         }
 
-        Product::create($validatedData);
-
-        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan.');
+        if ($product = Product::create($validatedData)) {
+            InventoryLog::create([
+                'product_id' => $product->id,
+                'change_type' => 'add',
+                'quantity' => $product->stock,
+                'note' => 'Produk diTambahkan',
+                'created_at' => now(),
+            ]);
+            return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan.');
+        }
+        return redirect()->route('products.index')->with('error', 'Produk gagal ditambahkan.');
     }
 
     public function edit($id)
@@ -82,8 +91,16 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
-        $product->delete();
-
-        return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus.');
+        if ($product->delete()) {
+            InventoryLog::create([
+                'product_id' => $product->id,
+                'change_type' => 'remove',
+                'quantity' => 0,
+                'note' => 'Produk dihapus',
+                'created_at' => now(),
+            ]);
+            return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus.');
+        }
+        return redirect()->route('products.index')->with('error', 'Produk gagal dihapus.');
     }
 }
