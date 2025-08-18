@@ -1,0 +1,126 @@
+@extends('layouts.app')
+@section('title', 'Sale Items')
+@section('content')
+    <div class="page-header">
+        <div class="page-block">
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('dashboard.index') }}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="javascript: void(0)">Penjualan</a>
+                        </li>
+                        <li class="breadcrumb-item" aria-current="page">
+                            Barang
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ breadcrumb ] end --><!-- [ Main Content ] start -->
+    <form method="POST" action="{{ route('sales.store-money') }}" class="row">
+        @csrf
+        <!-- [ sample-page ] start -->
+        <div class="col-12 col-md-12 col-lg-7">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-between align-items-center flex-wrap">
+                            @foreach ($accounts as $account)
+                                <label class="card card-money" style="width: 180px;cursor: pointer;"
+                                    for="account_{{ $account->id }}">
+                                    <div class="card-body d-flex flex-column align-items-center">
+                                        <input type="radio" hidden name="account_{{ $account->id }}"
+                                            value="{{ $account->id }}"
+                                            class="form-check-input account_{{ $account->id }}">
+                                        <h5 class="card-title">{{ $account->account_name }}</h5>
+                                        <img src="{{ asset('storage/' . $account->image) }}"
+                                            alt="{{ $account->account_name }}"
+                                            style="width:80%;min-height: 120px; object-fit: contain;">
+                                        <p class="card-text">Rp.{{ number_format($account->balance, 2, ',', '.') }}</p>
+                                    </div>
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-12 col-lg-5">
+            <div class="card">
+                <div class="card-body d-flex flex-column gap-2 ">
+                    <div class="container">
+                        <input type="number" name="amount" class="form-control mb-3" placeholder="Masukkan jumlah uang"
+                            required>
+                        <label for="in" id="in" class="btn btn-outline-primary btn-sm ">Masuk</label>
+                        <input type="radio" hidden name="type_transaction" value="in" class="form-check-input "
+                            id="in" checked>
+                        <label for="out" id="out" class="btn  btn-outline-danger  btn-sm">Keluar</label>
+                        <input type="radio" hidden name="type_transaction" value="out"
+                            class="form-check-input input-danger" id="out">
+                    </div>
+                    <div class="container">
+                        <button type="submit" class="btn btn-primary w-100">Simpan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+@endsection
+@push('styles')
+    <style>
+        .card-money {
+            cursor: pointer;
+            transition: transform 0.2s !important;
+        }
+
+        .card-money:hover {
+            transform: scale(1.05);
+            background-color: rgba(49, 147, 228, 0.5) !important;
+        }
+
+        .card-money.active {
+            background-color: rgba(49, 147, 228, 0.5) !important;
+            border: 2px solid #3193e4;
+        }
+    </style>
+@endpush
+@push('scripts')
+    <script>
+        let cardMoneys = document.querySelectorAll('.card-money');
+        cardMoneys.forEach(card => {
+            card.addEventListener('click', function() {
+                cardMoneys.forEach(c => c.classList.remove('active'));
+                cardMoneys.forEach(c => {
+                    let input = c.querySelector('input[type="radio"]');
+                    if (input) {
+                        input.checked = false;
+                    }
+                });
+                this.classList.add('active');
+                let input = this.querySelector('input[type="radio"]');
+                if (input) {
+                    input.checked = true;
+                }
+            });
+        });
+        let btns = document.querySelectorAll('.btn-outline-primary, .btn-outline-danger');
+        btns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.remove('btn-outline-primary', 'btn-outline-danger');
+                if (this.id === 'in') {
+                    this.classList.add('btn-primary');
+                    document.querySelector('#out').classList.add('btn-outline-danger');
+                    document.querySelector('#out').classList.remove('btn-danger');
+                } else {
+                    this.classList.add('btn-danger');
+                    document.querySelector('#in').classList.add('btn-outline-primary');
+                    document.querySelector('#in').classList.remove('btn-primary');
+                }
+            });
+        });
+    </script>
+@endpush

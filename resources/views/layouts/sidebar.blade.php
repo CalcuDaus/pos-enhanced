@@ -35,7 +35,7 @@
                                 <polyline points="9 18 15 12 9 6"></polyline>
                             </svg></span></a>
                     <ul class="pc-submenu" style="display: block; box-sizing: border-box;">
-                        <li class="pc-item"><a class="pc-link" href="#" data-i18n="Uang">Uang</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('sales.money') }}" data-i18n="Uang">Uang</a></li>
                         <li class="pc-item"><a class="pc-link" href="{{ route('sales.index') }}"
                                 data-i18n="Barang">Barang</a></li>
                     </ul>

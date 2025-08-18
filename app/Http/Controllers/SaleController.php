@@ -10,6 +10,7 @@ use App\Models\InventoryLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Account;
 
 class SaleController extends Controller
 {
@@ -103,6 +104,28 @@ class SaleController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal menyimpan transaksi. ' . $e->getMessage());
+        }
+    }
+    public function salesMoney()
+    {
+        $data = [
+            'title' => 'Penjualan',
+            'breadcrumbs' => [
+                ['name' => 'Penjualan', 'url' => route('sales.index')],
+                ['name' => 'Halaman Penjualan', 'url' => route('sales.index')],
+            ],
+            'accounts' => Account::all()
+        ];
+        return view('sale.sales-money', $data);
+    }
+    public function storyMoney(Request $request)
+    {
+        $request->validate([
+            'amount' => 'required|numeric|min:0',
+            'type_transaction' => 'required|in:in,out',
+        ]);
+        if (!$request->account_id) {
+            return redirect()->back()->with('error', 'Silahkan pilih rekening terlebih dahulu!');
         }
     }
 }
