@@ -120,12 +120,17 @@ class SaleController extends Controller
     }
     public function storyMoney(Request $request)
     {
+        dd($request->all());
         $request->validate([
             'amount' => 'required|numeric|min:0',
             'type_transaction' => 'required|in:in,out',
         ]);
         if (!$request->account_id) {
             return redirect()->back()->with('error', 'Silahkan pilih rekening terlebih dahulu!');
+        }
+        $account = Account::find($request->account_id);
+        if (!$account) {
+            return redirect()->back()->with('error', 'Rekening tidak ditemukan!');
         }
     }
 }

@@ -28,6 +28,8 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
+                        <h4 style="font-family: poppins;" class="mb-4">Pilih Rekening <span class="text-danger">*</span>
+                        </h4>
                         <div class="col-12 d-flex justify-content-between align-items-center flex-wrap">
                             @foreach ($accounts as $account)
                                 <label class="card card-money" style="width: 180px;cursor: pointer;"
@@ -52,18 +54,33 @@
         <div class="col-12 col-md-12 col-lg-5">
             <div class="card">
                 <div class="card-body d-flex flex-column gap-2 ">
+                    <h4 style="font-family: poppins;" class="mt-1 mb-3">Form Transaksi <span class="text-danger">*</span>
+                    </h4>
                     <div class="container">
-                        <input type="number" name="amount" class="form-control mb-3" placeholder="Masukkan jumlah uang"
-                            required>
+                        <input type="number" name="amount" class="form-control mb-3"
+                            placeholder="(Rp) Masukkan jumlah uang " required>
                         <label for="in" id="in" class="btn btn-outline-primary btn-sm ">Masuk</label>
-                        <input type="radio" hidden name="type_transaction" value="in" class="form-check-input "
-                            id="in" checked>
+                        <input type="radio" hidden name="type_transaction" value="in"
+                            class="form-check-input input_type_transaction" id="in">
                         <label for="out" id="out" class="btn  btn-outline-danger  btn-sm">Keluar</label>
                         <input type="radio" hidden name="type_transaction" value="out"
-                            class="form-check-input input-danger" id="out">
+                            class="form-check-input   input_type_transaction" id="out">
+                        <div class="d-flex gap-1 my-3">
+                            <label for="profit" id="profit" class="btn btn-outline-primary btn-sm ">Untung</label>
+                            <input type="radio" hidden name="is_profit" value="profit"
+                                class="form-check-input input_profit" id="profit">
+                            <label for="not_profit" id="is_profit" class="btn  btn-outline-danger  btn-sm">Rugi</label>
+                            <input type="radio" hidden name="is_profit" value="not_profit"
+                                class="form-check-input input_profit" id="is_profit">
+                            <label for="manual" id="manual" class="btn  btn-outline-warning  btn-sm">Atur</label>
+                            <input type="radio" hidden name="is_profit" value="manual"
+                                class="form-check-input input_profit" id="manual">
+                        </div>
+                        <input type="number" hidden id="amount_manual" name="amount_manual" class="form-control mb-3"
+                            placeholder="(Rp) Masukkan jumlah uang">
                     </div>
                     <div class="container">
-                        <button type="submit" class="btn btn-primary w-100">Simpan</button>
+                        <button type="submit" class="btn btn-success w-100">Simpan</button>
                     </div>
                 </div>
             </div>
@@ -107,18 +124,78 @@
                 }
             });
         });
-        let btns = document.querySelectorAll('.btn-outline-primary, .btn-outline-danger');
+        let btns = document.querySelectorAll('.btn-outline-primary, .btn-outline-danger, .btn-outline-warning');
+        let inputManual = document.querySelector('#amount_manual');
+        let inputTypeTransaction = document.querySelectorAll('.input_type_transaction');
+        let inputProfit = document.querySelectorAll('.input_profit');
         btns.forEach(btn => {
             btn.addEventListener('click', function() {
-                this.classList.remove('btn-outline-primary', 'btn-outline-danger');
+                this.classList.remove('btn-outline-primary', 'btn-outline-danger', 'btn-outline-warning');
                 if (this.id === 'in') {
+                    inputTypeTransaction.querySelectorAll('.input_type_transaction').forEach(b => {
+                        b.checked = false;
+                        if (this.id === 'in') {
+                            this.checked = true;
+                        }
+                    });
+                    this.checked = true;
                     this.classList.add('btn-primary');
                     document.querySelector('#out').classList.add('btn-outline-danger');
                     document.querySelector('#out').classList.remove('btn-danger');
-                } else {
+                } else if (this.id === 'out') {
+                    inputTypeTransaction.querySelectorAll('.input_type_transaction').forEach(b => {
+                        b.checked = false;
+                        if (this.id === 'out') {
+                            this.checked = true;
+                        }
+                    });
+                    this.checked = true;
                     this.classList.add('btn-danger');
                     document.querySelector('#in').classList.add('btn-outline-primary');
                     document.querySelector('#in').classList.remove('btn-primary');
+                }
+                if (this.id === 'profit') {
+                    inputProfit.querySelectorAll('.input_profit').forEach(b => {
+                        b.checked = false;
+                        if (this.id === 'profit') {
+                            this.checked = true;
+                        }
+                    });
+                    this.checked = true;
+                    this.classList.add('btn-primary');
+                    document.querySelector('#is_profit').classList.add('btn-outline-danger');
+                    document.querySelector('#is_profit').classList.remove('btn-danger');
+                    document.querySelector('#manual').classList.add('btn-outline-warning');
+                    document.querySelector('#manual').classList.remove('btn-warning');
+                    inputManual.setAttribute('hidden', true);
+                } else if (this.id === 'is_profit') {
+                    inputProfit.forEach(b => {
+                        b.checked = false;
+                        if (this.id === 'is_profit') {
+                            this.checked = true;
+                        }
+                    });
+                    this.checked = true;
+                    this.classList.add('btn-danger');
+                    document.querySelector('#profit').classList.add('btn-outline-primary');
+                    document.querySelector('#profit').classList.remove('btn-primary');
+                    document.querySelector('#manual').classList.add('btn-outline-warning');
+                    document.querySelector('#manual').classList.remove('btn-warning');
+                    inputManual.setAttribute('hidden', true);
+                } else if (this.id === 'manual') {
+                    inputProfit.querySelectorAll('.input_profit').forEach(b => {
+                        b.checked = false;
+                        if (this.id === 'manual') {
+                            this.checked = true;
+                        }
+                    });
+                    this.checked = true;
+                    this.classList.add('btn-warning');
+                    document.querySelector('#profit').classList.add('btn-outline-primary');
+                    document.querySelector('#profit').classList.remove('btn-primary');
+                    document.querySelector('#is_profit').classList.add('btn-outline-danger');
+                    document.querySelector('#is_profit').classList.remove('btn-danger');
+                    inputManual.removeAttribute('hidden');
                 }
             });
         });
