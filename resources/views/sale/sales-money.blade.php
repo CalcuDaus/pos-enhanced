@@ -35,7 +35,7 @@
                                 <label class="card card-money" style="width: 180px;cursor: pointer;"
                                     for="account_{{ $account->id }}">
                                     <div class="card-body d-flex flex-column align-items-center">
-                                        <input type="radio" hidden name="account_{{ $account->id }}"
+                                        <input type="radio" hidden name="account_id"
                                             value="{{ $account->id }}"
                                             class="form-check-input account_{{ $account->id }}">
                                         <h5 class="card-title">{{ $account->account_name }}</h5>

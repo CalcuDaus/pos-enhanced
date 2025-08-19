@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Sale;
 use App\Models\Income;
+use App\Models\Account;
+use App\Models\Expense;
 use App\Models\Product;
 use App\Models\SaleItem;
 use App\Models\InventoryLog;
 use Illuminate\Http\Request;
+use App\Models\AccountMutation;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Account;
 
 class SaleController extends Controller
 {
@@ -118,9 +120,8 @@ class SaleController extends Controller
         ];
         return view('sale.sales-money', $data);
     }
-    public function storyMoney(Request $request)
+    public function storeMoney(Request $request)
     {
-        dd($request->all());
         $request->validate([
             'amount' => 'required|numeric|min:0',
             'type_transaction' => 'required|in:in,out',
@@ -132,5 +133,58 @@ class SaleController extends Controller
         if (!$account) {
             return redirect()->back()->with('error', 'Rekening tidak ditemukan!');
         }
+        try {
+            DB::beginTransaction();
+            $account->update([
+                'balance' => $request->type_transaction == 'in' ? $account->balance + $request->amount : $account->balance - $request->amount
+            ]);
+            AccountMutation::create([
+                'account_id' => $account->id,
+                'mutation_type' => $request->type_transaction,
+                'amount' => $request->amount,
+            ]);
+            $biayaAdmin = $this->setBiayaAdmin($request->amount);
+            if ($biayaAdmin === null) {
+                return redirect()->back()->with('error', 'Jumlah transaksi tidak valid untuk biaya admin!');
+            }
+            // logic untuk menyimpan income atau expense
+            if ($request->type_transaction == 'out') {
+                Expense::create([
+                    'date' => now()->toDateString(),
+                    'amount' => $biayaAdmin,
+                    'category' => 'Transaksi Keuangan',
+                    'description' => 'Transaksi Penjualan Keuangan',
+                ]);
+            } else if ($request->type_transaction == 'in') {
+                Income::create([
+                    'date' => now()->toDateString(),
+                    'amount' => $biayaAdmin,
+                ]);
+            } else {
+                return redirect()->back()->with('error', 'Jenis transaksi tidak valid!');
+            }
+            DB::commit();
+            return redirect()->back()->with('success', 'Transaksi berhasil!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Gagal menyimpan transaksi. ' . $e->getMessage());
+        }
+    }
+    private function setBiayaAdmin($amount)
+    {
+        if ($amount > 0 && $amount < 100000) {
+            return 2000;
+        } elseif ($amount > 100000) {
+            return 3000;
+        } elseif ($amount > 500000) {
+            return 5000;
+        } elseif ($amount > 3000000) {
+            return 7000;
+        } elseif ($amount > 5000000) {
+            return 10000;
+        } else {
+            return null;
+        }
+        return null;
     }
 }
