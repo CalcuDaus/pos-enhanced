@@ -143,7 +143,7 @@ class SaleController extends Controller
                 'mutation_type' => $request->type_transaction,
                 'amount' => $request->amount,
             ]);
-            $biayaAdmin = $this->setBiayaAdmin($request->amount);
+            $biayaAdmin = $request->amount_manual ?? $this->setBiayaAdmin($request->amount);
             if ($biayaAdmin === null) {
                 return redirect()->back()->with('error', 'Jumlah transaksi tidak valid untuk biaya admin!');
             }
