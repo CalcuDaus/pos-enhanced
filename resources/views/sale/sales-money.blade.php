@@ -132,10 +132,10 @@
             btn.addEventListener('click', function() {
                 this.classList.remove('btn-outline-primary', 'btn-outline-danger', 'btn-outline-warning');
                 if (this.id === 'in') {
-                    inputTypeTransaction.querySelectorAll('.input_type_transaction').forEach(b => {
+                    inputTypeTransaction.forEach(b => {
                         b.checked = false;
-                        if (this.id === 'in') {
-                            this.checked = true;
+                        if (b.id === 'in') {
+                            b.checked = true;
                         }
                     });
                     this.checked = true;
@@ -143,10 +143,10 @@
                     document.querySelector('#out').classList.add('btn-outline-danger');
                     document.querySelector('#out').classList.remove('btn-danger');
                 } else if (this.id === 'out') {
-                    inputTypeTransaction.querySelectorAll('.input_type_transaction').forEach(b => {
+                    inputTypeTransaction.forEach(b => {
                         b.checked = false;
-                        if (this.id === 'out') {
-                            this.checked = true;
+                        if (b.id === 'out') {
+                            b.checked = true;
                         }
                     });
                     this.checked = true;
@@ -155,10 +155,10 @@
                     document.querySelector('#in').classList.remove('btn-primary');
                 }
                 if (this.id === 'profit') {
-                    inputProfit.querySelectorAll('.input_profit').forEach(b => {
+                    inputProfit.forEach(b => {
                         b.checked = false;
-                        if (this.id === 'profit') {
-                            this.checked = true;
+                        if (b.id === 'profit') {
+                            b.checked = true;
                         }
                     });
                     this.checked = true;
@@ -171,8 +171,8 @@
                 } else if (this.id === 'is_profit') {
                     inputProfit.forEach(b => {
                         b.checked = false;
-                        if (this.id === 'is_profit') {
-                            this.checked = true;
+                        if (b.id === 'is_profit') {
+                            b.checked = true;
                         }
                     });
                     this.checked = true;
@@ -183,10 +183,10 @@
                     document.querySelector('#manual').classList.remove('btn-warning');
                     inputManual.setAttribute('hidden', true);
                 } else if (this.id === 'manual') {
-                    inputProfit.querySelectorAll('.input_profit').forEach(b => {
+                    inputProfit.forEach(b => {
                         b.checked = false;
-                        if (this.id === 'manual') {
-                            this.checked = true;
+                        if (b.id === 'manual') {
+                            b.checked = true;
                         }
                     });
                     this.checked = true;
