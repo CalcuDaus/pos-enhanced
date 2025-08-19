@@ -122,10 +122,7 @@ class SaleController extends Controller
     }
     public function storeMoney(Request $request)
     {
-        $request->validate([
-            'amount' => 'required|numeric|min:0',
-            'type_transaction' => 'required|in:in,out',
-        ]);
+        // dd($request->all());
         if (!$request->account_id) {
             return redirect()->back()->with('error', 'Silahkan pilih rekening terlebih dahulu!');
         }
@@ -148,17 +145,17 @@ class SaleController extends Controller
                 return redirect()->back()->with('error', 'Jumlah transaksi tidak valid untuk biaya admin!');
             }
             // logic untuk menyimpan income atau expense
-            if ($request->type_transaction == 'out') {
+            if ($request->is_profit == 'profit') {
+                Income::create([
+                    'date' => now()->toDateString(),
+                    'amount' => $biayaAdmin,
+                ]);
+            } else if ($request->is_profit == 'not_profit') {
                 Expense::create([
                     'date' => now()->toDateString(),
                     'amount' => $biayaAdmin,
                     'category' => 'Transaksi Keuangan',
                     'description' => 'Transaksi Penjualan Keuangan',
-                ]);
-            } else if ($request->type_transaction == 'in') {
-                Income::create([
-                    'date' => now()->toDateString(),
-                    'amount' => $biayaAdmin,
                 ]);
             } else {
                 return redirect()->back()->with('error', 'Jenis transaksi tidak valid!');
