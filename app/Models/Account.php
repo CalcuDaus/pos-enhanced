@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\AccountMutation;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Account extends Model
 {
@@ -14,4 +15,8 @@ class Account extends Model
         'balance',
         'image',
     ];
+    public function mutations()
+    {
+        return $this->hasMany(AccountMutation::class);
+    }
 }

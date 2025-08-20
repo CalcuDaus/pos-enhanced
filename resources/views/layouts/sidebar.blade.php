@@ -19,6 +19,9 @@
                         <li class="pc-item">
                             <a class="pc-link" href="/" data-i18n="Grafik Data">Grafik Data</a>
                         </li>
+                        <li class="pc-item">
+                            <a class="pc-link" href="{{ route('reports.index') }}" data-i18n="Laporan">Laporan</a>
+                        </li>
                     </ul>
                 </li>
 

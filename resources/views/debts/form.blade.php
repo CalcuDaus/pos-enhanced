@@ -48,7 +48,6 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="mb-3">
                     <label class="form-label">Masukkan Nama Pelanggan</label>
                     <input type="text"  name="customer_name" class="form-control"

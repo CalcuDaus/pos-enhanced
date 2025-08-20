@@ -20,6 +20,7 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('report', [DashboardController::class, 'report'])->name('reports.index');
 
     // Sales 
     Route::get('sales', [SaleController::class, 'index'])->name('sales.index');

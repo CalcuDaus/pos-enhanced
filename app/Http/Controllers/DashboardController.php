@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
@@ -19,6 +21,49 @@ class DashboardController extends Controller
         return view('dashboard.index', $data);
     }
 
+    public function report()
+    {
+        $startOfDay = Carbon::today()->startOfDay();
+
+        // Ambil semua akun beserta mutasi yang terjadi setelah jam 00:00
+        $accounts = Account::with(['mutations' => function ($q) use ($startOfDay) {
+            $q->where('created_at', '>=', $startOfDay);
+        }])->get();
+
+        // Hitung saldo awal, selisih, dan persentase per akun
+        $accounts = $accounts->map(function ($account) {
+            $currentBalance = $account->balance;
+
+            // Hitung total mutasi hari ini
+            $mutationsToday = $account->mutations;
+            $totalIn  = $mutationsToday->where('mutation_type', 'in')->sum('amount');
+            $totalOut = $mutationsToday->where('mutation_type', 'out')->sum('amount');
+
+            // Saldo awal hari = saldo sekarang - (mutasi masuk hari ini) + (mutasi keluar hari ini)
+            $beginBalance = $currentBalance - $totalIn + $totalOut;
+
+            // Hitung persentase perubahan
+            $percentage = 0;
+            if ($beginBalance > 0) {
+                $percentage = (($currentBalance - $beginBalance) / $beginBalance) * 100;
+            }
+
+            return [
+                'account_id'      => $account->id,
+                'account_name'    => $account->account_name,
+                'image'    => $account->image,
+                'begin_balance'   => $beginBalance,
+                'current_balance' => $currentBalance,
+                'difference'      => $currentBalance - $beginBalance,
+                'percentage'      => round($percentage, 2),
+            ];
+        });
+
+        // Kirim ke view
+        return view('dashboard.report', [
+            'accounts' => $accounts,
+        ]);
+    }
     private function todaySummary()
     {
 
@@ -43,12 +88,6 @@ class DashboardController extends Controller
 
     private function getYearlySummaryData()
     {
-        // // Pendapatan per bulan
-        // $incomePerMonth = DB::table('sale_items')
-        //     ->selectRaw("MONTH(created_at) as month, SUM(profit) as total")
-        //     ->whereYear('created_at', now()->year)
-        //     ->groupBy(DB::raw('MONTH(created_at)'))
-        //     ->pluck('total', 'month');
         $incomePerMonth = DB::table('incomes')
             ->selectRaw("MONTH(date) as month, SUM(amount) as total")
             ->whereYear('date', now()->year)
