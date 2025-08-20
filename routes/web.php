@@ -9,6 +9,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DebtController;
 use App\Http\Controllers\InventoryStockController;
 
 
@@ -30,5 +31,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('customers', CustomerController::class);
     Route::resource('accounts', AccountController::class);
     Route::resource('users', UserController::class);
+    Route::resource('debts', DebtController::class);
     Route::get('inventories', [InventoryStockController::class, 'index'])->name('inventories.index');
 });

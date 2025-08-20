@@ -41,7 +41,7 @@
                     </ul>
                 </li>
                 <li class="pc-item">
-                    <a href="../widget/w_user.html" class="pc-link"><span class="pc-micon"><i
+                    <a href="{{ route('debts.index') }}" class="pc-link"><span class="pc-micon"><i
                                 class="ph-duotone ph-hand-coins"></i> </span><span class="pc-mtext"
                             data-i18n="Utang">Utang</span></a>
                 </li>

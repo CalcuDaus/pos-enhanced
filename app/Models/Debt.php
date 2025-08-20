@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Debt extends Model
 {
-    protected $fillable = ['amount', 'due_date', 'status'];
+    protected $fillable = ['amount', 'customer_id'];
 
     public function customer(): BelongsTo
     {
