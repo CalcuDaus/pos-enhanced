@@ -24,7 +24,7 @@
     <form method="POST" action="{{ route('sales.store-money') }}" class="row">
         @csrf
         <!-- [ sample-page ] start -->
-        <div class="col-12 col-md-12 col-lg-7">
+        <div class="col-12 col-md-12 col-lg-6">
             <div class="card">
                 <div class="card-body">
                     <div class="row">
@@ -50,7 +50,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-12 col-lg-5">
+        <div class="col-12 col-md-12 col-lg-6">
             <div class="card">
                 <div class="card-body d-flex flex-column gap-2 ">
                     <h4 style="font-family: poppins;" class="mt-1 mb-3">Form Transaksi <span class="text-danger">*</span>
@@ -74,16 +74,58 @@
                                 <label for="not_profit" id="is_profit" class="btn  btn-outline-danger  btn-sm">Rugi</label>
                                 <input type="radio" hidden name="is_profit" value="not_profit"
                                     class="form-check-input input_profit" id="is_profit">
-                                <label for="manual" id="manual" class="btn  btn-outline-warning  btn-sm">Atur</label>
+                                <label for="manual" id="manual" class="btn  btn-outline-warning  btn-sm">TF Rekening
+                                    Pribadi</label>
                                 <input type="radio" hidden name="is_profit" value="manual"
                                     class="form-check-input manual_input" id="manual">
                             </div>
                         </div>
-                        <input type="number" hidden id="amount_manual" name="amount_manual" class="form-control mb-3"
-                            placeholder="(Rp) Masukkan jumlah uang">
                     </div>
                     <div class="container">
                         <button type="submit" class="btn btn-success w-100">Simpan</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card">
+                <div class="card-body d-flex flex-column gap-2 ">
+                    <h4 style="font-family: poppins;" class="mt-1 mb-3">Riwayat Transaksi<span class="text-danger">*</span>
+                    </h4>
+                    <div class="container" style="font-family: Poppins">
+                        <div class="table-responsive">
+                            <table class="table table-hover " id="dt-riwayat">
+                                <thead>
+                                    <tr>
+                                        <th>Nama Rekening</th>
+                                        <th>Tipe Transaksi</th>
+                                        <th>Nominal</th>
+                                        <th>Waktu</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($mutations as $mutation)
+                                        <tr>
+                                            <td>{{ $mutation->account->account_name }}</td>
+                                            <td class="text-center">
+                                                @if ($mutation->mutation_type == 'in')
+                                                    <span style="font-size: 12px;background-color: #1da83b"
+                                                        class=" px-3 py-1 rounded text-white">Masuk</span>
+                                                @else
+                                                    <span style="font-size: 12px"
+                                                        class="bg-danger px-3 py-1 rounded text-white">Keluar</span>
+                                                @endif
+                                            </td>
+                                            <td> Rp. {{ number_format($mutation->amount, 0, ',', '.') ?? 0 }}</td>
+                                            <td>{{ $mutation->created_at }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="3" class="text-center">Belum ada riwayat hari ini.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -110,6 +152,10 @@
 @endpush
 @push('scripts')
     <script>
+        const datatable = document.querySelector('#dt-riwayat');
+        if (datatable) {
+            new simpleDatatables.DataTable(datatable);
+        }
         let cardMoneys = document.querySelectorAll('.card-money');
         cardMoneys.forEach(card => {
             card.addEventListener('click', function() {
@@ -169,6 +215,8 @@
                     this.classList.add('btn-primary');
                     document.querySelector('#is_profit').classList.add('btn-outline-danger');
                     document.querySelector('#is_profit').classList.remove('btn-danger');
+                    document.querySelector('#manual').classList.add('btn-outline-warning');
+                    document.querySelector('#manual').classList.remove('btn-warning');
                 } else if (this.id === 'is_profit') {
                     inputProfit.forEach(b => {
                         b.checked = false;
@@ -180,12 +228,16 @@
                     this.classList.add('btn-danger');
                     document.querySelector('#profit').classList.add('btn-outline-primary');
                     document.querySelector('#profit').classList.remove('btn-primary');
-                }
-                if (this.id === 'manual') {
+                    document.querySelector('#manual').classList.add('btn-outline-warning');
+                    document.querySelector('#manual').classList.remove('btn-warning');
+                } else if (this.id === 'manual') {
                     document.querySelector('.manual_input').checked = true;
                     this.checked = true;
                     this.classList.add('btn-warning');
-                    inputManual.removeAttribute('hidden');
+                    document.querySelector('#is_profit').classList.add('btn-outline-danger');
+                    document.querySelector('#is_profit').classList.remove('btn-danger');
+                    document.querySelector('#profit').classList.add('btn-outline-primary');
+                    document.querySelector('#profit').classList.remove('btn-primary');
                 }
             });
         });

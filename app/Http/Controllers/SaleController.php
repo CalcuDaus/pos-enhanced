@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Models\AccountMutation;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 class SaleController extends Controller
 {
@@ -110,13 +111,17 @@ class SaleController extends Controller
     }
     public function salesMoney()
     {
+        $start = Carbon::now()->subDays(6)->startOfDay(); // 6 hari ke belakang + hari ini = 7 hari
+        $end = Carbon::now()->endOfDay();
+
         $data = [
             'title' => 'Penjualan',
             'breadcrumbs' => [
                 ['name' => 'Penjualan', 'url' => route('sales.index')],
                 ['name' => 'Halaman Penjualan', 'url' => route('sales.index')],
             ],
-            'accounts' => Account::all()
+            'accounts' => Account::all(),
+            'mutations' => AccountMutation::whereBetween('created_at', [$start, $end])->orderByDesc('created_at')->get(),
         ];
         return view('sale.sales-money', $data);
     }
@@ -140,7 +145,7 @@ class SaleController extends Controller
                 'mutation_type' => $request->type_transaction,
                 'amount' => $request->amount,
             ]);
-            $biayaAdmin = $request->amount_manual ?? $this->setBiayaAdmin($request->amount);
+            $biayaAdmin = $request->is_profit == 'manual' ? 0 : $this->setBiayaAdmin($request->amount);
             if ($biayaAdmin === null) {
                 return redirect()->back()->with('error', 'Jumlah transaksi tidak valid untuk biaya admin!');
             }
@@ -157,6 +162,13 @@ class SaleController extends Controller
                     'category' => 'Transaksi Keuangan',
                     'description' => 'Transaksi Penjualan Keuangan',
                 ]);
+            } else if ($request->is_profit == 'manual') {
+                Expense::create([
+                    'date' => now()->toDateString(),
+                    'amount' => $biayaAdmin,
+                    'category' => 'Tf Pribadi',
+                    'description' => 'Transaksi Penjualan Keuangan',
+                ]);
             } else {
                 return redirect()->back()->with('error', 'Jenis transaksi tidak valid!');
             }
@@ -169,9 +181,9 @@ class SaleController extends Controller
     }
     private function setBiayaAdmin($amount)
     {
-        if ($amount > 0 && $amount < 100000) {
+        if ($amount < 100000) {
             return 2000;
-        } elseif ($amount > 100000) {
+        } elseif ($amount >= 100000) {
             return 3000;
         } elseif ($amount > 500000) {
             return 5000;
@@ -182,6 +194,5 @@ class SaleController extends Controller
         } else {
             return null;
         }
-        return null;
     }
 }

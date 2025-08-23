@@ -45,11 +45,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'Voucher Paket',
         ]);
         Category::factory()->create([
-            'name' => 'Voucher Game',
+            'name' => 'Game',
         ]);
         Category::factory()->create([
             'name' => 'Kategori Lainnya',
         ]);
-        Product::factory(50)->create();
+        // Product::factory(50)->create();
     }
 }

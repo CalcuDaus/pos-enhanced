@@ -194,16 +194,15 @@
 
                 // 2. Ambil data dari checkout untuk struk
                 let receiptHtml = `
-        <div style="font-family: monospace; padding:2px; width:240px;">
-            <h3 style="text-align:center;">TOKO SAYA</h3>
+        <div style="font-family: monospace;  width:250px;">
+            <h3 style="text-align:center;">Annisa Ponsel</h3>
              <div style="display:flex;align-items:center;gap:2px;">
                 <img src="{{ asset('img/logo-POS.png') }}" alt="logo image" width="50px" />
-                <span style="font-family: poppins;font-weight: 700;font-size: 1.3rem;"class="mt-2">Point Of
-                    Sales</span>
+                <span style="font-family: poppins;font-weight: 700;font-size: 1.3rem;"class="mt-2">Struk Belanja</span>
             </div>
-            <p style="text-align:center;">Jl. Contoh No.1</p>
+            <p style="text-align:center;">Jl. Putra Denai</p>
             <hr>
-            <table style="width:90%; font-size:13px;">
+            <table style="width:90%; font-size:15px;">
     `;
                 addedItems.forEach(item => {
                     receiptHtml += `
@@ -216,10 +215,10 @@
                 receiptHtml += `
             </table>
             <hr>
-            <p>Total: <strong>${totalPriceEl.textContent}</strong></p>
-            <p>Bayar: ${formatRupiah(parseInt(document.getElementById('nominal-bayar').value) || 0)}</p>
-            <p>Kembalian: ${document.getElementById('modal-kembalian').textContent}</p>
-            <p style="text-align:center;font-size:15px;font-weight:bold;">Terima kasih</p>
+            <p style="font-size:16px;">Total: <strong>${totalPriceEl.textContent}</strong></p>
+            <p style="font-size:16px;">Bayar: ${formatRupiah(parseInt(document.getElementById('nominal-bayar').value) || 0)}</p>
+            <p style="font-size:16px;">Kembalian: ${document.getElementById('modal-kembalian').textContent}</p>
+            <p style="text-align:center;font-size:16px;font-weight:bold;">Terima kasih</p>
             <p style="text-align:center;">Senang menunggumu kembali ketoko kami!</p>
         </div>
     `;
