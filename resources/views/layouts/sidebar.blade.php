@@ -38,7 +38,8 @@
                                 <polyline points="9 18 15 12 9 6"></polyline>
                             </svg></span></a>
                     <ul class="pc-submenu" style="display: block; box-sizing: border-box;">
-                        <li class="pc-item"><a class="pc-link" href="{{ route('sales.money') }}" data-i18n="Uang">Uang</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('sales.money') }}"
+                                data-i18n="Uang">Uang</a></li>
                         <li class="pc-item"><a class="pc-link" href="{{ route('sales.index') }}"
                                 data-i18n="Barang">Barang</a></li>
                     </ul>
@@ -47,6 +48,11 @@
                     <a href="{{ route('debts.index') }}" class="pc-link"><span class="pc-micon"><i
                                 class="ph-duotone ph-hand-coins"></i> </span><span class="pc-mtext"
                             data-i18n="Utang">Utang</span></a>
+                </li>
+                <li class="pc-item">
+                    <a href="{{ route('expenses.index') }}" class="pc-link"><span class="pc-micon"><i
+                                class="ph-duotone ph-cards"></i> </span><span class="pc-mtext"
+                            data-i18n="Pengeluaran">Pengeluaran</span></a>
                 </li>
 
                 @if (auth()->user()->role === 'admin')

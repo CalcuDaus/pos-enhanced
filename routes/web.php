@@ -10,6 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DebtController;
+use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\InventoryStockController;
 
 
@@ -22,7 +23,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('report', [DashboardController::class, 'report'])->name('reports.index');
 
-    // Sales 
+    // Sales
     Route::get('sales', [SaleController::class, 'index'])->name('sales.index');
     Route::get('sales-money', [SaleController::class, 'salesMoney'])->name('sales.money');
     Route::post('sales', [SaleController::class, 'store'])->name('sales.store');
@@ -32,6 +33,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('customers', CustomerController::class);
     Route::resource('accounts', AccountController::class);
     Route::resource('users', UserController::class);
+    Route::resource('expenses', ExpensesController::class);
     Route::resource('debts', DebtController::class);
     Route::get('inventories', [InventoryStockController::class, 'index'])->name('inventories.index');
 });
