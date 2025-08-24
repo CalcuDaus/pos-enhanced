@@ -113,7 +113,6 @@ class SaleController extends Controller
     {
         $start = Carbon::now()->subDays(6)->startOfDay(); // 6 hari ke belakang + hari ini = 7 hari
         $end = Carbon::now()->endOfDay();
-
         $data = [
             'title' => 'Penjualan',
             'breadcrumbs' => [
@@ -121,6 +120,7 @@ class SaleController extends Controller
                 ['name' => 'Halaman Penjualan', 'url' => route('sales.index')],
             ],
             'accounts' => Account::all(),
+            'accounts_sum' => Account::sum('balance'),
             'mutations' => AccountMutation::whereBetween('created_at', [$start, $end])->orderByDesc('created_at')->get(),
         ];
         return view('sale.sales-money', $data);

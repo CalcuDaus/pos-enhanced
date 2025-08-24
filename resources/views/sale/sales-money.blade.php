@@ -28,8 +28,17 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <h4 style="font-family: poppins;" class="mb-4">Pilih Rekening <span class="text-danger">*</span>
-                        </h4>
+                        <div class="d-flex justify-content-between">
+                            <h4 style="font-family: poppins;" class="mb-4">Pilih Rekening <span
+                                    class="text-danger">*</span>
+
+                            </h4>
+                            <p>
+                                Total Saldo : <span style="font-size:20px;font-weight:bold;">
+                                    Rp.{{ number_format($accounts_sum, 2, ',', '.') }}
+                                </span></p>
+                        </div>
+
                         <div class="col-12 d-flex gap-4 justify-content-center align-items-center flex-wrap">
                             @foreach ($accounts as $account)
                                 <label class="card card-money" style="width: 180px;cursor: pointer;"

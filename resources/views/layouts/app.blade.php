@@ -86,10 +86,20 @@
     <script src="{{ asset('js/apexcharts.js') }}"></script>
 
     <script>
-        layout_change("light");
-    </script>
-    <script>
-        layout_sidebar_change("light");
+        document.addEventListener("DOMContentLoaded", function() {
+            // Ambil jam sekarang dari browser
+            let now = new Date();
+            let hour = now.getHours();
+
+            // Kalau sudah lewat jam 18.00, ubah theme jadi dark
+            if (hour >= 18) {
+                layout_change("dark");
+                layout_sidebar_change("dark");
+            } else {
+                layout_change("light");
+                layout_sidebar_change("light");
+            }
+        });
     </script>
     <script>
         change_box_container("false");
