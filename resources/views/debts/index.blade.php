@@ -39,6 +39,8 @@
                                 <th style="width: 5%;">#</th>
                                 <th>Pelanggan</th>
                                 <th>Jumlah Hutang</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -48,6 +50,8 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $debt->customer->name ?? '-' }}</td>
                                     <td>Rp {{ number_format($debt->amount, 2, ',', '.') }}</td>
+                                    <td>{{ $debt->created_at ?? '-' }}</td>
+                                    <td>{{ $debt->updated_at ?? '-' }}</td>
                                     <td>
                                         <div class="prod-action-links">
                                             <ul class="list-inline mb-0">
