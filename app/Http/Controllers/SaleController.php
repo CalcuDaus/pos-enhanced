@@ -127,7 +127,8 @@ class SaleController extends Controller
     }
     public function storeMoney(Request $request)
     {
-        // dd($request->all());
+        dd($request->all());
+        $amount = intval(str_replace('.', '', $request->amount));
         if (!$request->account_id) {
             return redirect()->back()->with('error', 'Silahkan pilih rekening terlebih dahulu!');
         }
@@ -138,14 +139,14 @@ class SaleController extends Controller
         try {
             DB::beginTransaction();
             $account->update([
-                'balance' => $request->type_transaction == 'in' ? $account->balance + $request->amount : $account->balance - $request->amount
+                'balance' => $request->type_transaction == 'in' ? $account->balance + $amount : $account->balance - $amount
             ]);
             AccountMutation::create([
                 'account_id' => $account->id,
                 'mutation_type' => $request->type_transaction,
-                'amount' => $request->amount,
+                'amount' => $amount,
             ]);
-            $biayaAdmin = $request->is_profit == 'manual' ? 0 : $this->setBiayaAdmin($request->amount);
+            $biayaAdmin = $request->is_profit == 'manual' ? 0 : $this->setBiayaAdmin($amount);
             if ($biayaAdmin === null) {
                 return redirect()->back()->with('error', 'Jumlah transaksi tidak valid untuk biaya admin!');
             }

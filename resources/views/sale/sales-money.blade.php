@@ -65,8 +65,8 @@
                     <h4 style="font-family: poppins;" class="mt-1 mb-3">Form Transaksi <span class="text-danger">*</span>
                     </h4>
                     <div class="container">
-                        <input type="number" name="amount" class="form-control mb-3"
-                            placeholder="(Rp) Masukkan jumlah uang " required>
+                        <input type="text" name="amount" class="form-control mb-3"
+                            placeholder="(Rp) Masukkan jumlah uang " required inputmode="numeric">
                         <h6>Pilih Tipe Transaksi</h6>
                         <label for="in" id="in" class="btn btn-outline-primary btn-sm ">Masuk</label>
                         <input type="radio" hidden name="type_transaction" value="in"
@@ -77,16 +77,13 @@
                         <div class="d-flex gap-1 my-3 flex-column">
                             <h6>Atur Keuntungan / Rugi</h6>
                             <div class="d-flex gap-1">
-                                <label for="profit" id="profit" class="btn btn-outline-primary btn-sm ">Untung</label>
-                                <input type="radio" hidden name="is_profit" value="profit"
+                                <label for="profit" id="profit" class="btn btn-primary  btn-sm">Untung</label>
+                                <input type="radio" hidden checked name="is_profit" value="profit"
                                     class="form-check-input input_profit" id="profit">
-                                <label for="not_profit" id="is_profit" class="btn  btn-outline-danger  btn-sm">Rugi</label>
-                                <input type="radio" hidden name="is_profit" value="not_profit"
-                                    class="form-check-input input_profit" id="is_profit">
                                 <label for="manual" id="manual" class="btn  btn-outline-warning  btn-sm">TF Rekening
                                     Pribadi</label>
                                 <input type="radio" hidden name="is_profit" value="manual"
-                                    class="form-check-input manual_input" id="manual">
+                                    class="form-check-input input_profit" id="manual">
                             </div>
                         </div>
                     </div>
@@ -161,10 +158,118 @@
 @endpush
 @push('scripts')
     <script>
+        // Function to format number with Indonesian currency format
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        // Function to remove formatting and get clean number
+        function cleanNumber(formattedNum) {
+            return formattedNum.replace(/\./g, '');
+        }
+
+        // Get the amount input field
+        const amountInput = document.querySelector('input[name="amount"]');
+
+        if (amountInput) {
+            // Change input type to text for formatting support
+            amountInput.type = 'text';
+            amountInput.setAttribute('inputmode', 'numeric');
+
+            // Add event listener for input formatting
+            amountInput.addEventListener('input', function(e) {
+                // Get current cursor position
+                let cursorPosition = e.target.selectionStart;
+
+                // Get the current value and remove any existing formatting
+                let value = e.target.value.replace(/\./g, '');
+
+                // Remove any non-digit characters
+                value = value.replace(/\D/g, '');
+
+                // Don't format if empty
+                if (value === '') {
+                    e.target.value = '';
+                    return;
+                }
+
+                // Store original length
+                let originalLength = e.target.value.length;
+
+                // Format the number
+                let formattedValue = formatNumber(value);
+
+                // Set the formatted value
+                e.target.value = formattedValue;
+
+                // Calculate new cursor position
+                let newLength = formattedValue.length;
+                let lengthDiff = newLength - originalLength;
+                let newCursorPosition = cursorPosition + lengthDiff;
+
+                // Ensure cursor position is within bounds
+                if (newCursorPosition < 0) newCursorPosition = 0;
+                if (newCursorPosition > formattedValue.length) newCursorPosition = formattedValue.length;
+
+                // Set cursor position after a brief delay
+                setTimeout(() => {
+                    e.target.setSelectionRange(newCursorPosition, newCursorPosition);
+                }, 0);
+            });
+
+            // Handle paste events
+            amountInput.addEventListener('paste', function(e) {
+                setTimeout(() => {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value !== '') {
+                        e.target.value = formatNumber(value);
+                    }
+                }, 0);
+            });
+
+            // Add validation to ensure only numbers can be entered
+            amountInput.addEventListener('keypress', function(e) {
+                // Allow backspace, delete, tab, escape, enter
+                if ([8, 9, 27, 13, 46].indexOf(e.keyCode) !== -1 ||
+                    // Allow Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                    (e.keyCode === 65 && e.ctrlKey === true) ||
+                    (e.keyCode === 67 && e.ctrlKey === true) ||
+                    (e.keyCode === 86 && e.ctrlKey === true) ||
+                    (e.keyCode === 88 && e.ctrlKey === true)) {
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+        }
+
+        // Update form submission to send clean number
+        const form = document.querySelector('form');
+        if (form && amountInput) {
+            form.addEventListener('submit', function(e) {
+                // Clean the amount value before submission
+                let cleanValue = cleanNumber(amountInput.value);
+
+                // Validate that we have a number
+                if (cleanValue === '' || isNaN(cleanValue)) {
+                    e.preventDefault();
+                    alert('Mohon masukkan jumlah yang valid');
+                    return false;
+                }
+
+                // Set the clean value for submission
+                amountInput.value = cleanValue;
+            });
+        }
+
+        // Rest of your existing JavaScript code...
         const datatable = document.querySelector('#dt-riwayat');
         if (datatable) {
             new simpleDatatables.DataTable(datatable);
         }
+
         let cardMoneys = document.querySelectorAll('.card-money');
         cardMoneys.forEach(card => {
             card.addEventListener('click', function() {
@@ -182,13 +287,15 @@
                 }
             });
         });
-        let btns = document.querySelectorAll('.btn-outline-primary, .btn-outline-danger, .btn-outline-warning');
-        let inputManual = document.querySelector('#amount_manual');
+
+        let btns = document.querySelectorAll('.btn-outline-primary, .btn-outline-danger, .btn-outline-warning,.btn-primary');
         let inputTypeTransaction = document.querySelectorAll('.input_type_transaction');
         let inputProfit = document.querySelectorAll('.input_profit');
+
         btns.forEach(btn => {
             btn.addEventListener('click', function() {
                 this.classList.remove('btn-outline-primary', 'btn-outline-danger', 'btn-outline-warning');
+
                 if (this.id === 'in') {
                     inputTypeTransaction.forEach(b => {
                         b.checked = false;
@@ -196,7 +303,6 @@
                             b.checked = true;
                         }
                     });
-                    this.checked = true;
                     this.classList.add('btn-primary');
                     document.querySelector('#out').classList.add('btn-outline-danger');
                     document.querySelector('#out').classList.remove('btn-danger');
@@ -207,12 +313,11 @@
                             b.checked = true;
                         }
                     });
-                    this.checked = true;
                     this.classList.add('btn-danger');
                     document.querySelector('#in').classList.add('btn-outline-primary');
                     document.querySelector('#in').classList.remove('btn-primary');
                 }
-
+                console.log(this);
                 if (this.id === 'profit') {
                     inputProfit.forEach(b => {
                         b.checked = false;
@@ -220,31 +325,19 @@
                             b.checked = true;
                         }
                     });
-                    this.checked = true;
+                    console.log(this);
                     this.classList.add('btn-primary');
-                    document.querySelector('#is_profit').classList.add('btn-outline-danger');
-                    document.querySelector('#is_profit').classList.remove('btn-danger');
-                    document.querySelector('#manual').classList.add('btn-outline-warning');
-                    document.querySelector('#manual').classList.remove('btn-warning');
-                } else if (this.id === 'is_profit') {
-                    inputProfit.forEach(b => {
-                        b.checked = false;
-                        if (b.id === 'is_profit') {
-                            b.checked = true;
-                        }
-                    });
-                    this.checked = true;
-                    this.classList.add('btn-danger');
-                    document.querySelector('#profit').classList.add('btn-outline-primary');
-                    document.querySelector('#profit').classList.remove('btn-primary');
                     document.querySelector('#manual').classList.add('btn-outline-warning');
                     document.querySelector('#manual').classList.remove('btn-warning');
                 } else if (this.id === 'manual') {
-                    document.querySelector('.manual_input').checked = true;
-                    this.checked = true;
+                    inputProfit.forEach(b => {
+                        b.checked = false;
+                        if (b.id === 'manual') {
+                            b.checked = true;
+                        }
+                    });
+                    console.log(this);
                     this.classList.add('btn-warning');
-                    document.querySelector('#is_profit').classList.add('btn-outline-danger');
-                    document.querySelector('#is_profit').classList.remove('btn-danger');
                     document.querySelector('#profit').classList.add('btn-outline-primary');
                     document.querySelector('#profit').classList.remove('btn-primary');
                 }
