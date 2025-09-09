@@ -127,7 +127,6 @@ class SaleController extends Controller
     }
     public function storeMoney(Request $request)
     {
-        dd($request->all());
         $amount = intval(str_replace('.', '', $request->amount));
         if (!$request->account_id) {
             return redirect()->back()->with('error', 'Silahkan pilih rekening terlebih dahulu!');
@@ -198,10 +197,27 @@ class SaleController extends Controller
                 $account->update([
                     'balance' => $account->balance - $mutation->amount
                 ]);
+                // logic untuk menghapus income atau expense terkait
+                $expense = Expense::where('created_at', $mutation->created_at)->first();
+                if ($expense) {
+                    $expense->delete();
+                }
+                $income = Income::where('created_at', $mutation->created_at)->first();
+                if ($income) {
+                    $income->delete();
+                }
             } else {
                 $account->update([
                     'balance' => $account->balance + $mutation->amount
                 ]);
+                $income = Income::where('created_at', $mutation->created_at)->first();
+                if ($income) {
+                    $income->delete();
+                }
+                $expense = Expense::where('created_at', $mutation->created_at)->first();
+                if ($expense) {
+                    $expense->delete();
+                }
             }
             // Hapus mutasi
             $mutation->delete();
@@ -214,18 +230,18 @@ class SaleController extends Controller
     }
     private function setBiayaAdmin($amount)
     {
-        if ($amount < 100000) {
+        if ($amount >= 1 && $amount < 100000) {
             return 2000;
-        } elseif ($amount >= 100000) {
+        } elseif ($amount >= 100000 && $amount < 500000) {
             return 3000;
-        } elseif ($amount > 500000) {
+        } elseif ($amount >= 500000 && $amount < 3000000) {
             return 5000;
-        } elseif ($amount > 3000000) {
+        } elseif ($amount >= 3000000 && $amount < 5000000) {
             return 7000;
-        } elseif ($amount > 5000000) {
+        } elseif ($amount >= 5000000) {
             return 10000;
-        } else {
-            return null;
         }
+
+        return null; // jika amount tidak sesuai kondisi
     }
 }
