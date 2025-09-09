@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('sales-money', [SaleController::class, 'salesMoney'])->name('sales.money');
     Route::post('sales', [SaleController::class, 'store'])->name('sales.store');
     Route::post('sales-money', [SaleController::class, 'storeMoney'])->name('sales.store-money');
+    Route::delete('sales-money-delete/{id}', [SaleController::class, 'deleteMutation'])->name('sales.delete-money');
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('customers', CustomerController::class);

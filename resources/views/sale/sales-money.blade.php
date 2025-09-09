@@ -91,15 +91,18 @@
                         <button type="submit" class="btn btn-success w-100">Simpan</button>
                     </div>
                 </div>
-
             </div>
+        </div>
+    </form>
+    <div class="row justify-content-end riwayat-transaksi">
+        <div class="col-12 col-md-12 col-lg-6 ">
             <div class="card">
                 <div class="card-body d-flex flex-column gap-2 ">
                     <h4 style="font-family: poppins;" class="mt-1 mb-3">Riwayat Transaksi<span class="text-danger">*</span>
                     </h4>
                     <div class="container" style="font-family: Poppins">
                         <div class="table-responsive">
-                            <table class="table table-hover " id="dt-riwayat">
+                            <table class="table table-hover tbl-product" id="dt-riwayat">
                                 <thead>
                                     <tr>
                                         <th>Nama Rekening</th>
@@ -122,7 +125,24 @@
                                                 @endif
                                             </td>
                                             <td> Rp. {{ number_format($mutation->amount, 0, ',', '.') ?? 0 }}</td>
-                                            <td>{{ $mutation->created_at }}</td>
+                                            <td>{{ $mutation->created_at }}
+                                                <div class="prod-action-links">
+                                                    <ul class="list-inline me-auto mb-0">
+                                                        <li class="list-inline-item align-bottom" data-bs-toggle="tooltip"
+                                                            aria-label="Delete" data-bs-original-title="Delete">
+                                                            <form
+                                                                action="{{ route('sales.delete-money', $mutation->id) }}"
+                                                                method="post">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit"
+                                                                    class="avtar avtar-xs btn-link-danger btn-pc-default"><i
+                                                                        class="ti ti-trash f-18"></i></button>
+                                                            </form>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -136,13 +156,23 @@
                 </div>
             </div>
         </div>
-    </form>
+    </div>
 @endsection
 @push('styles')
     <style>
         .card-money {
             cursor: pointer;
             transition: transform 0.2s !important;
+        }
+
+        .riwayat-transaksi{
+            transform: translateY(-780px)
+        }
+
+        @media (max-width: 876px) {
+            .riwayat-transaksi{
+                transform: translateY(0px)
+            }
         }
 
         .card-money:hover {
@@ -288,7 +318,8 @@
             });
         });
 
-        let btns = document.querySelectorAll('.btn-outline-primary, .btn-outline-danger, .btn-outline-warning,.btn-primary');
+        let btns = document.querySelectorAll(
+            '.btn-outline-primary, .btn-outline-danger, .btn-outline-warning,.btn-primary');
         let inputTypeTransaction = document.querySelectorAll('.input_type_transaction');
         let inputProfit = document.querySelectorAll('.input_profit');
 

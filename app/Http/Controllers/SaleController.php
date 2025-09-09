@@ -180,6 +180,38 @@ class SaleController extends Controller
             return redirect()->back()->with('error', 'Gagal menyimpan transaksi. ' . $e->getMessage());
         }
     }
+
+    public function deleteMutation($id)
+    {
+        $mutation = AccountMutation::find($id);
+        if (!$mutation) {
+            return redirect()->back()->with('error', 'Mutasi tidak ditemukan!');
+        }
+        $account = Account::find($mutation->account_id);
+        if (!$account) {
+            return redirect()->back()->with('error', 'Rekening tidak ditemukan!');
+        }
+        try {
+            DB::beginTransaction();
+            // Balikkan perubahan saldo rekening
+            if ($mutation->mutation_type == 'in') {
+                $account->update([
+                    'balance' => $account->balance - $mutation->amount
+                ]);
+            } else {
+                $account->update([
+                    'balance' => $account->balance + $mutation->amount
+                ]);
+            }
+            // Hapus mutasi
+            $mutation->delete();
+            DB::commit();
+            return redirect()->back()->with('success', 'Mutasi berhasil dihapus!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Gagal menghapus mutasi. ' . $e->getMessage());
+        }
+    }
     private function setBiayaAdmin($amount)
     {
         if ($amount < 100000) {
