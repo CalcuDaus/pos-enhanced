@@ -94,9 +94,9 @@
             </div>
         </div>
     </form>
-    <div class="row justify-content-end riwayat-transaksi">
+    <div class="row justify-content-end ">
         <div class="col-12 col-md-12 col-lg-6 ">
-            <div class="card">
+            <div class="card riwayat-transaksi">
                 <div class="card-body d-flex flex-column gap-2 ">
                     <h4 style="font-family: poppins;" class="mt-1 mb-3">Riwayat Transaksi<span class="text-danger">*</span>
                     </h4>
@@ -165,12 +165,12 @@
             transition: transform 0.2s !important;
         }
 
-        .riwayat-transaksi{
+        .riwayat-transaksi {
             transform: translateY(-780px)
         }
 
         @media (max-width: 876px) {
-            .riwayat-transaksi{
+            .riwayat-transaksi {
                 transform: translateY(0px)
             }
         }
