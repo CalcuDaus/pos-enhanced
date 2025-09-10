@@ -80,7 +80,11 @@ class DashboardController extends Controller
             ->where('date', Carbon::today())
             ->get();
 
-        $averageIncome = round(DB::table('incomes')->whereBetween('date', [$start, $end])->avg('amount'));
+        $averageIncome = DB::table('incomes')
+            ->selectRaw("SUM(amount) as total")
+            ->whereBetween('date', [$start, $end])
+            ->get();
+        // dd($averageIncome);
 
 
 

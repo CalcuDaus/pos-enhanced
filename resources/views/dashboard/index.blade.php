@@ -77,7 +77,7 @@
                     <div class="d-flex align-items-center mt-3">
                         <h3 class="text-white f-w-300 d-flex align-items-center m-b-0">
                             Rp.
-                            {{ number_format($todaySummary['averageIncome'], 0, ',', '.') ?? 0 }}
+                            {{ number_format($todaySummary['averageIncome'][0]->total / 7, 0, ',', '.') ?? 0 }}
                         </h3>
                     </div>
                     <p class="text-white text-opacity-75 mb-2 text-sm mt-3">
