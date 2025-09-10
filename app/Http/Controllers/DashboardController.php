@@ -66,7 +66,8 @@ class DashboardController extends Controller
     }
     private function todaySummary()
     {
-
+        $start = Carbon::now()->subDays(6)->startOfDay(); // 6 hari ke belakang + hari ini = 7 hari
+        $end = Carbon::now()->endOfDay();
 
         $incomeToday = DB::table('incomes')
             ->selectRaw("SUM(amount) as total")
@@ -79,10 +80,15 @@ class DashboardController extends Controller
             ->where('date', Carbon::today())
             ->get();
 
+        $averageIncome = round(DB::table('incomes')->whereBetween('date', [$start, $end])->avg('amount'));
+
+
+
 
         return [
             'incomeToday' => $incomeToday,
             'expenseToday' => $expenseToday,
+            'averageIncome' => $averageIncome,
         ];
     }
 

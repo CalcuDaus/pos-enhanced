@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Dashboard')
 @section('content')
+
     <!-- [ breadcrumb ] start -->
     <div class="page-header">
         <div class="page-block">
@@ -72,11 +73,11 @@
                 <div class="card-body">
                     <img src="{{ asset('dist/assets/images/widget/img-status-6.svg') }}" alt="img"
                         class="img-fluid img-bg" />
-                    <h5 class="mb-4 text-white">Bersih Hari Ini</h5>
+                    <h5 class="mb-4 text-white">Rata - Rata minggu ini</h5>
                     <div class="d-flex align-items-center mt-3">
                         <h3 class="text-white f-w-300 d-flex align-items-center m-b-0">
                             Rp.
-                            {{ number_format($todaySummary['incomeToday'][0]->total - $todaySummary['expenseToday'][0]->total, 0, ',', '.') ?? 0 }}
+                            {{ number_format($todaySummary['averageIncome'], 0, ',', '.') ?? 0 }}
                         </h3>
                     </div>
                     <p class="text-white text-opacity-75 mb-2 text-sm mt-3">
