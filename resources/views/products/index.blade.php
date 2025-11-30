@@ -49,8 +49,6 @@
                                     <td class="text-end">{{ $loop->iteration }}</td>
                                     <td>
                                         <div class="row">
-                                            <div class="col-auto pe-0"><img src="{{ asset('storage/' . $product->image) }}"
-                                                    alt="{{ $product->image }}" class="wid-40 rounded"></div>
                                             <div class="col">
                                                 <h6 class="mb-1">{{ $product->name }}</h6>
                                                 <p class="text-muted f-12 mb-0">{{ $product->product_code }}</p>
