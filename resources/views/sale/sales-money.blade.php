@@ -39,17 +39,17 @@
                                 </span></p>
                         </div>
 
-                        <div class="col-12 d-flex gap-4 justify-content-center align-items-center flex-wrap">
+                        <div class="col-12 d-flex gap-2 justify-content-center align-items-center flex-wrap">
                             @foreach ($accounts as $account)
-                                <label class="card card-money" style="width: 180px;cursor: pointer;"
+                                <label class="card m-0 card-money" style="width: 150px;cursor: pointer;"
                                     for="account_{{ $account->id }}">
-                                    <div class="card-body d-flex flex-column align-items-center">
+                                    <div class="card-body  d-flex flex-column align-items-center">
                                         <input type="radio" hidden name="account_id" value="{{ $account->id }}"
                                             class="form-check-input account_{{ $account->id }}">
                                         <h5 class="card-title">{{ $account->account_name }}</h5>
                                         <img src="{{ asset('storage/' . $account->image) }}"
                                             alt="{{ $account->account_name }}"
-                                            style="width:80%;min-height: 120px; object-fit: contain;">
+                                            style="width:50%;min-height: 80px; object-fit: contain;">
                                         <p class="card-text">Rp.{{ number_format($account->balance, 2, ',', '.') }}</p>
                                     </div>
                                 </label>
@@ -166,7 +166,7 @@
         }
 
         .riwayat-transaksi {
-            transform: translateY(-780px)
+            transform: translateY(-290px)
         }
 
         @media (max-width: 876px) {
