@@ -42,6 +42,8 @@
                                 data-i18n="Uang">Uang</a></li>
                         <li class="pc-item"><a class="pc-link" href="{{ route('sales.index') }}"
                                 data-i18n="Barang">Barang</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('sales.history') }}"
+                                data-i18n="History">History</a></li>
                     </ul>
                 </li>
                 <li class="pc-item">
@@ -123,16 +125,16 @@
                         <img src="{{ asset('dist/assets/images/user/avatar-1.jpg') }}" alt="user-image"
                             class="user-avtar wid-45 rounded-circle" />
                     </div>
-                    <div class="flex-grow-1 ms-3">
+                    <div class="grow ms-3">
                         <div class="dropdown">
                             <a href="#" class="arrow-none dropdown-toggle" data-bs-toggle="dropdown"
                                 aria-expanded="false" data-bs-offset="0,20">
                                 <div class="d-flex align-items-center">
-                                    <div class="flex-grow-1 me-2">
+                                    <div class="grow me-2">
                                         <h6 class="mb-0">{{ Auth::user()->name }}</h6>
                                         <small>{{ Auth::user()->role }}</small>
                                     </div>
-                                    <div class="flex-shrink-0">
+                                    <div class="shink-0">
                                         <div class="btn btn-icon btn-link-secondary avtar">
                                             <i class="ph-duotone ph-windows-logo"></i>
                                         </div>

@@ -111,7 +111,7 @@ class SaleController extends Controller
     }
     public function salesMoney()
     {
-        $start = Carbon::now()->subDays(6)->startOfDay(); // 6 hari ke belakang + hari ini = 7 hari
+        $start = Carbon::now()->subDays(200)->startOfDay(); // 6 hari ke belakang + hari ini = 7 hari
         $end = Carbon::now()->endOfDay();
         $data = [
             'title' => 'Penjualan',
@@ -228,6 +228,45 @@ class SaleController extends Controller
             return redirect()->back()->with('error', 'Gagal menghapus mutasi. ' . $e->getMessage());
         }
     }
+
+    public function salesHistory()
+    {
+        $data = [
+            'title' => 'Riwayat Penjualan',
+            'breadcrumbs' => [
+                ['name' => 'Penjualan', 'url' => route('sales.index')],
+                ['name' => 'Riwayat Penjualan', 'url' => route('sales.history')],
+            ],
+            'sales' => Sale::with([
+                'saleItems.product',
+                'customer',
+                'user'
+            ])->orderByDesc('created_at')->get(),
+        ];
+
+        return view('sale.sales-history', $data);
+    }
+
+    public function salesHistoryProductDetails($id)
+    {
+        $sale = Sale::with('saleItems.product')->find($id);
+
+        $productDetails = [];
+        foreach ($sale->saleItems as $item) {
+            $productDetails[] = [
+                'product_name' => $item->product->name,
+                'quantity' => $item->quantity,
+                'price' => $item->price,
+                'subtotal' => $item->subtotal,
+            ];
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $productDetails
+        ]);
+    }
+
     private function setBiayaAdmin($amount)
     {
         if ($amount >= 1 && $amount < 100000) {
