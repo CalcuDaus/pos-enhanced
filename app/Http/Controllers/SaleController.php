@@ -121,7 +121,7 @@ class SaleController extends Controller
             ],
             'accounts' => Account::all(),
             'accounts_sum' => Account::sum('balance'),
-            'mutations' => AccountMutation::whereBetween('created_at', [$start, $end])->orderByDesc('created_at')->get(),
+            'mutations' => AccountMutation::with('account')->whereBetween('created_at', [$start, $end])->orderByDesc('created_at')->paginate(20),
         ];
         return view('sale.sales-money', $data);
     }

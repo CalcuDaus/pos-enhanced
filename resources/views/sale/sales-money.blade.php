@@ -49,6 +49,7 @@
                                         <h5 class="card-title">{{ $account->account_name }}</h5>
                                         <img src="{{ asset('storage/' . $account->image) }}"
                                             alt="{{ $account->account_name }}"
+                                            loading="lazy"
                                             style="width:50%;min-height: 80px; object-fit: contain;">
                                         <p class="card-text">Rp.{{ number_format($account->balance, 2, ',', '.') }}</p>
                                     </div>
@@ -98,8 +99,13 @@
         <div class="col-12 col-md-12 col-lg-6 ">
             <div class="card riwayat-transaksi">
                 <div class="card-body d-flex flex-column gap-2 ">
-                    <h4 style="font-family: poppins;" class="mt-1 mb-3">Riwayat Transaksi<span class="text-danger">*</span>
-                    </h4>
+                    <div class="d-flex justify-content-between align-items-center mt-1 mb-3">
+                        <h4 style="font-family: poppins;" class="mb-0">Riwayat Transaksi<span class="text-danger">*</span></h4>
+                        <div class="search-box">
+                            <input type="text" id="search-mutation" class="form-control form-control-sm" placeholder="Cari transaksi..."
+                                style="width: 200px;">
+                        </div>
+                    </div>
                     <div class="container" style="font-family: Poppins">
                         <div class="table-responsive">
                             <table class="table table-hover tbl-product" id="dt-riwayat">
@@ -151,6 +157,36 @@
                                     @endforelse
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="mt-3 d-flex justify-content-between align-items-center">
+                            <span class="text-muted">Showing {{ $mutations->firstItem() ?? 0 }} to {{ $mutations->lastItem() ?? 0 }} of
+                                {{ $mutations->total() }} results</span>
+                            <nav>
+                                <ul class="pagination pagination-sm mb-0">
+                                    {{-- Previous Page Link --}}
+                                    @if ($mutations->onFirstPage())
+                                        <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                                    @else
+                                        <li class="page-item"><a class="page-link" href="{{ $mutations->previousPageUrl() }}">&laquo;</a></li>
+                                    @endif
+
+                                    {{-- Pagination Elements --}}
+                                    @foreach ($mutations->getUrlRange(max(1, $mutations->currentPage() - 2), min($mutations->lastPage(), $mutations->currentPage() + 2)) as $page => $url)
+                                        @if ($page == $mutations->currentPage())
+                                            <li class="page-item active"><span class="page-link">{{ $page }}</span></li>
+                                        @else
+                                            <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Next Page Link --}}
+                                    @if ($mutations->hasMorePages())
+                                        <li class="page-item"><a class="page-link" href="{{ $mutations->nextPageUrl() }}">&raquo;</a></li>
+                                    @else
+                                        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                                    @endif
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                 </div>
@@ -295,84 +331,106 @@
         }
 
         // Rest of your existing JavaScript code...
-        const datatable = document.querySelector('#dt-riwayat');
-        if (datatable) {
-            new simpleDatatables.DataTable(datatable);
-        }
+                    // DataTable removed - using server-side pagination for better performance
 
-        let cardMoneys = document.querySelectorAll('.card-money');
-        cardMoneys.forEach(card => {
-            card.addEventListener('click', function() {
-                cardMoneys.forEach(c => c.classList.remove('active'));
-                cardMoneys.forEach(c => {
-                    let input = c.querySelector('input[type="radio"]');
-                    if (input) {
-                        input.checked = false;
+                    let cardMoneys = document.querySelectorAll('.card-money');
+                    cardMoneys.forEach(card => {
+                        card.addEventListener('click', function () {
+                            cardMoneys.forEach(c => c.classList.remove('active'));
+                            cardMoneys.forEach(c => {
+                                let input = c.querySelector('input[type="radio"]');
+                                if (input) {
+                                    input.checked = false;
+                                }
+                            });
+                            this.classList.add('active');
+                            let input = this.querySelector('input[type="radio"]');
+                            if (input) {
+                                input.checked = true;
+                            }
+                        });
+                    });
+
+                    let btns = document.querySelectorAll(
+                        '.btn-outline-primary, .btn-outline-danger, .btn-outline-warning,.btn-primary');
+                    let inputTypeTransaction = document.querySelectorAll('.input_type_transaction');
+                    let inputProfit = document.querySelectorAll('.input_profit');
+
+                    btns.forEach(btn => {
+                        btn.addEventListener('click', function () {
+                            this.classList.remove('btn-outline-primary', 'btn-outline-danger', 'btn-outline-warning');
+
+                            if (this.id === 'in') {
+                                inputTypeTransaction.forEach(b => {
+                                    b.checked = false;
+                                    if (b.id === 'in') {
+                                        b.checked = true;
+                                    }
+                                });
+                                this.classList.add('btn-primary');
+                                document.querySelector('#out').classList.add('btn-outline-danger');
+                                document.querySelector('#out').classList.remove('btn-danger');
+                            } else if (this.id === 'out') {
+                                inputTypeTransaction.forEach(b => {
+                                    b.checked = false;
+                                    if (b.id === 'out') {
+                                        b.checked = true;
+                                    }
+                                });
+                                this.classList.add('btn-danger');
+                                document.querySelector('#in').classList.add('btn-outline-primary');
+                                document.querySelector('#in').classList.remove('btn-primary');
+                            }
+                            console.log(this);
+                            if (this.id === 'profit') {
+                                inputProfit.forEach(b => {
+                                    b.checked = false;
+                                    if (b.id === 'profit') {
+                                        b.checked = true;
+                                    }
+                                });
+                                console.log(this);
+                                this.classList.add('btn-primary');
+                                document.querySelector('#manual').classList.add('btn-outline-warning');
+                                document.querySelector('#manual').classList.remove('btn-warning');
+                            } else if (this.id === 'manual') {
+                                inputProfit.forEach(b => {
+                                    b.checked = false;
+                                    if (b.id === 'manual') {
+                                        b.checked = true;
+                                    }
+                                });
+                                console.log(this);
+                                this.classList.add('btn-warning');
+                                document.querySelector('#profit').classList.add('btn-outline-primary');
+                                document.querySelector('#profit').classList.remove('btn-primary');
+                            }
+                        });
+                    });
+
+                    // Realtime search functionality
+                    const searchInput = document.getElementById('search-mutation');
+                    const tableBody = document.querySelector('#dt-riwayat tbody');
+                    const tableRows = tableBody.querySelectorAll('tr');
+
+                    if (searchInput) {
+                        searchInput.addEventListener('input', function () {
+                            const searchTerm = this.value.toLowerCase().trim();
+
+                            tableRows.forEach(row => {
+                                const accountName = row.cells[0]?.textContent.toLowerCase() || '';
+                                const transactionType = row.cells[1]?.textContent.toLowerCase() || '';
+                                const amount = row.cells[2]?.textContent.toLowerCase() || '';
+                                const date = row.cells[3]?.textContent.toLowerCase() || '';
+
+                                const matches = accountName.includes(searchTerm) ||
+                                    transactionType.includes(searchTerm) ||
+                                    amount.includes(searchTerm) ||
+                                    date.includes(searchTerm);
+
+                                row.style.display = matches ? '' : 'none';
+                            });
+                        });
                     }
-                });
-                this.classList.add('active');
-                let input = this.querySelector('input[type="radio"]');
-                if (input) {
-                    input.checked = true;
-                }
-            });
-        });
-
-        let btns = document.querySelectorAll(
-            '.btn-outline-primary, .btn-outline-danger, .btn-outline-warning,.btn-primary');
-        let inputTypeTransaction = document.querySelectorAll('.input_type_transaction');
-        let inputProfit = document.querySelectorAll('.input_profit');
-
-        btns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                this.classList.remove('btn-outline-primary', 'btn-outline-danger', 'btn-outline-warning');
-
-                if (this.id === 'in') {
-                    inputTypeTransaction.forEach(b => {
-                        b.checked = false;
-                        if (b.id === 'in') {
-                            b.checked = true;
-                        }
-                    });
-                    this.classList.add('btn-primary');
-                    document.querySelector('#out').classList.add('btn-outline-danger');
-                    document.querySelector('#out').classList.remove('btn-danger');
-                } else if (this.id === 'out') {
-                    inputTypeTransaction.forEach(b => {
-                        b.checked = false;
-                        if (b.id === 'out') {
-                            b.checked = true;
-                        }
-                    });
-                    this.classList.add('btn-danger');
-                    document.querySelector('#in').classList.add('btn-outline-primary');
-                    document.querySelector('#in').classList.remove('btn-primary');
-                }
-                console.log(this);
-                if (this.id === 'profit') {
-                    inputProfit.forEach(b => {
-                        b.checked = false;
-                        if (b.id === 'profit') {
-                            b.checked = true;
-                        }
-                    });
-                    console.log(this);
-                    this.classList.add('btn-primary');
-                    document.querySelector('#manual').classList.add('btn-outline-warning');
-                    document.querySelector('#manual').classList.remove('btn-warning');
-                } else if (this.id === 'manual') {
-                    inputProfit.forEach(b => {
-                        b.checked = false;
-                        if (b.id === 'manual') {
-                            b.checked = true;
-                        }
-                    });
-                    console.log(this);
-                    this.classList.add('btn-warning');
-                    document.querySelector('#profit').classList.add('btn-outline-primary');
-                    document.querySelector('#profit').classList.remove('btn-primary');
-                }
-            });
-        });
     </script>
 @endpush
