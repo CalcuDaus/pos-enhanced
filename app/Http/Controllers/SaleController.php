@@ -111,7 +111,7 @@ class SaleController extends Controller
     }
     public function salesMoney()
     {
-        $start = Carbon::now()->subDays(200)->startOfDay(); // 6 hari ke belakang + hari ini = 7 hari
+        $start = Carbon::now()->subDays(7)->startOfDay(); // 6 hari ke belakang + hari ini = 7 hari
         $end = Carbon::now()->endOfDay();
         $data = [
             'title' => 'Penjualan',

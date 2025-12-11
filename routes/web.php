@@ -38,5 +38,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('users', UserController::class);
     Route::resource('expenses', ExpensesController::class);
     Route::resource('debts', DebtController::class);
+    Route::post('debts/{id}/payoff', [DebtController::class, 'payOff'])->name('debts.payoff');
+    Route::post('debts/{id}/add-amount', [DebtController::class, 'addAmount'])->name('debts.add-amount');
     Route::get('inventories', [InventoryStockController::class, 'index'])->name('inventories.index');
 });

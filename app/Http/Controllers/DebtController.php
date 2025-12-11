@@ -100,6 +100,26 @@ class DebtController extends Controller
         return redirect()->route('debts.index')->with('success', 'Hutang berhasil diperbarui.');
     }
 
+    public function addAmount(Request $request, $id)
+    {
+        $request->validate([
+            'add_amount' => 'required|numeric|min:0',
+        ]);
+
+        $debt = Debt::findOrFail(Crypt::decrypt($id));
+        $debt->update(['amount' => $debt->amount + $request->add_amount]);
+
+        return redirect()->route('debts.index')->with('success', 'Hutang berhasil ditambahkan.');
+    }
+
+    public function payOff($id)
+    {
+        $debt = Debt::findOrFail(Crypt::decrypt($id));
+        $debt->update(['amount' => 0]);
+
+        return redirect()->route('debts.index')->with('success', 'Hutang berhasil dilunasi.');
+    }
+
     public function destroy($id)
     {
         $debt = Debt::findOrFail(Crypt::decrypt($id));

@@ -39,6 +39,7 @@
                                 <th style="width: 5%;">#</th>
                                 <th>Pelanggan</th>
                                 <th>Jumlah Hutang</th>
+                                <th>Tambah Hutang</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
                                 <th>Aksi</th>
@@ -49,12 +50,37 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $debt->customer->name ?? '-' }}</td>
-                                    <td>Rp {{ number_format($debt->amount, 2, ',', '.') }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span></span>Rp {{ number_format($debt->amount, 2, ',', '.') }}</span>
+
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('debts.add-amount', Crypt::encrypt($debt->id)) }}" class="d-flex align-items-center gap-2"
+                                            method="post">
+                                            @csrf
+                                            <input type="number" name="add_amount" class="form-control form-control-sm" style="width: 100px;"
+                                                placeholder="0" min="0" step="any">
+                                            <span class="text-muted" style="font-size: 10px;">press <br> enter</span>
+                                        </form>
+                                    </td>
                                     <td>{{ $debt->created_at ?? '-' }}</td>
                                     <td>{{ $debt->updated_at ?? '-' }}</td>
                                     <td>
                                         <div class="prod-action-links">
                                             <ul class="list-inline mb-0">
+                                                @if($debt->amount > 0)
+                                                    <li class="list-inline-item" data-bs-toggle="tooltip" title="Lunas Utang">
+                                                        <form action="{{ route('debts.payoff', Crypt::encrypt($debt->id)) }}" method="post"
+                                                            onsubmit="return confirm('Yakin ingin melunasi hutang ini?');">
+                                                            @csrf
+                                                            <button type="submit" class="avtar avtar-xs btn-link-success btn-pc-default">
+                                                                <i class="ti ti-check f-18"></i>
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                @endif
                                                 <li class="list-inline-item" data-bs-toggle="tooltip" title="Edit">
                                                     <a href="{{ route('debts.edit', $debt->id) }}"
                                                         class="avtar avtar-xs btn-link-success btn-pc-default">
