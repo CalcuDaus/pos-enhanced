@@ -8,15 +8,18 @@ use Illuminate\Support\Facades\Crypt;
 
 class ExpensesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $perPage = $request->input('per_page', 10);
+
         $data = [
             'title' => 'Kelola Pengeluaran',
             'breadcrumbs' => [
                 ['name' => 'Kelola Pengeluaran', 'url' => route('expenses.index')],
                 ['name' => 'Daftar Pengeluaran', 'url' => route('expenses.index')],
             ],
-            'expenses' => Expense::orderBy('date', 'desc')->get()
+            'expenses' => Expense::orderBy('date', 'desc')->paginate($perPage)->withQueryString(),
+            'perPage' => $perPage,
         ];
 
         return view('expenses.index', $data);

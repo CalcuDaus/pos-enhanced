@@ -76,7 +76,19 @@
         <div class="col-md-8">
             <div class="card table-card pt-3 px-3">
                 <div class="card-body">
-                    <h5 class="mb-3">Daftar Pengeluaran</h5>
+                    <div class="mb-3 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Daftar Pengeluaran</h5>
+                        <div class="d-flex align-items-center">
+                            <label class="me-2 mb-0 text-nowrap">Rows per page:</label>
+                            <select class="form-select form-select-sm" style="width: auto;"
+                                onchange="window.location.href='{{ route('expenses.index') }}?per_page=' + this.value">
+                                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                                <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-hover" id="dt-expenses">
                             <thead>
@@ -92,7 +104,7 @@
                             <tbody>
                                 @forelse ($expenses as $expense)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $expenses->firstItem() + $loop->index }}</td>
                                         <td>{{ \Carbon\Carbon::parse($expense->date)->format('d-m-Y') }}</td>
                                         <td>{{ $expense->category }}</td>
                                         <td>{{ $expense->description ?? '-' }}</td>
@@ -107,14 +119,11 @@
                                                         </a>
                                                     </li>
                                                     <li class="list-inline-item" title="Delete">
-                                                        <form
-                                                            action="{{ route('expenses.destroy', Crypt::encrypt($expense->id)) }}"
-                                                            method="post"
-                                                            onsubmit="return confirm('Yakin ingin menghapus pengeluaran ini?');">
+                                                        <form action="{{ route('expenses.destroy', Crypt::encrypt($expense->id)) }}"
+                                                            method="post" onsubmit="return confirm('Yakin ingin menghapus pengeluaran ini?');">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit"
-                                                                class="avtar avtar-xs btn-link-danger btn-pc-default">
+                                                            <button type="submit" class="avtar avtar-xs btn-link-danger btn-pc-default">
                                                                 <i class="ti ti-trash f-18"></i>
                                                             </button>
                                                         </form>
@@ -131,8 +140,43 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Pagination -->
+                    @if ($expenses->hasPages())
+                        <div class="mt-3 d-flex justify-content-between align-items-center">
+                            <span class="text-muted">Showing {{ $expenses->firstItem() ?? 0 }} to {{ $expenses->lastItem() ?? 0 }} of
+                                {{ $expenses->total() }} results</span>
+                            <nav>
+                                <ul class="pagination pagination-sm mb-0">
+                                    {{-- Previous Page Link --}}
+                                    @if ($expenses->onFirstPage())
+                                        <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                                    @else
+                                        <li class="page-item"><a class="page-link" href="{{ $expenses->previousPageUrl() }}">&laquo;</a></li>
+                                    @endif
+
+                                    {{-- Pagination Elements --}}
+                                    @foreach ($expenses->getUrlRange(max(1, $expenses->currentPage() - 2), min($expenses->lastPage(), $expenses->currentPage() + 2)) as $page => $url)
+                                        @if ($page == $expenses->currentPage())
+                                            <li class="page-item active"><span class="page-link">{{ $page }}</span></li>
+                                        @else
+                                            <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Next Page Link --}}
+                                    @if ($expenses->hasMorePages())
+                                        <li class="page-item"><a class="page-link" href="{{ $expenses->nextPageUrl() }}">&raquo;</a></li>
+                                    @else
+                                        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                                    @endif
+                                </ul>
+                            </nav>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
