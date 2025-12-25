@@ -122,7 +122,7 @@
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div class="flex-shrink-0">
-                        <img src="{{ asset('dist/assets/images/user/avatar-1.jpg') }}" alt="user-image"
+                        <img src="{{ asset('assets/images/user/avatar-1.jpg') }}" alt="user-image"
                             class="user-avtar wid-45 rounded-circle" />
                     </div>
                     <div class="grow ms-3">
