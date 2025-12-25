@@ -10,27 +10,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="author" content="mhd_firdaus" />
     <!-- [Favicon] icon -->
-    <link rel="icon" href="{{ asset('dist/assets/images/favicon.svg') }}" type="image/x-icon" />
+    <link rel="icon" href="{{ asset('assets/images/favicon.svg') }}" type="image/x-icon" />
     <!-- map-vector css -->
-    <link rel="stylesheet" href="{{ asset('dist/assets/css/plugins/jsvectormap.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/plugins/jsvectormap.min.css') }}" />
     <!-- data tables css -->
-    <link rel="stylesheet" href="{{ asset('dist/assets/css/plugins/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/plugins/style.css') }}">
     <!-- [Google Font : Public Sans] icon -->
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet" />
     <!-- [phosphor Icons] https://phosphoricons.com/ -->
-    <link rel="stylesheet" href="{{ asset('dist/assets/fonts/phosphor/duotone/style.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/fonts/phosphor/duotone/style.css') }}" />
     <!-- [Tabler Icons] https://tablericons.com -->
-    <link rel="stylesheet" href="{{ asset('dist/assets/fonts/tabler-icons.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/fonts/tabler-icons.min.css') }}" />
     <!-- [Feather Icons] https://feathericons.com -->
-    <link rel="stylesheet" href="{{ asset('dist/assets/fonts/feather.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/fonts/feather.css') }}" />
     <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
-    <link rel="stylesheet" href="{{ asset('dist/assets/fonts/fontawesome.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/fonts/fontawesome.css') }}" />
     <!-- [Material Icons] https://fonts.google.com/icons -->
-    <link rel="stylesheet" href="{{ asset('dist/assets/fonts/material.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/fonts/material.css') }}" />
     <!-- [Template CSS Files] -->
-    <link rel="stylesheet" href="{{ asset('dist/assets/css/style.css') }}" id="main-style-link" />
-    <link rel="stylesheet" href="{{ asset('dist/assets/css/style-preset.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" id="main-style-link" />
+    <link rel="stylesheet" href="{{ asset('assets/css/style-preset.css') }}" />
     <!-- [Custom CSS] -->
     @stack('styles')
 
@@ -61,28 +61,28 @@
     <!-- [ Off Canvas ] End -->
 
     <!-- [Page Specific JS] start -->
-    <script src="{{ asset('dist/assets/js/plugins/apexcharts.min.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/plugins/jsvectormap.min.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/plugins/world.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/plugins/world-merc.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/widgets/earnings-users-chart.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/widgets/world-map-markers.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/plugins/sweetalert2.all.min.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/plugins/simple-datatables.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/jsvectormap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/world.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/world-merc.js') }}"></script>
+    <script src="{{ asset('assets/js/widgets/earnings-users-chart.js') }}"></script>
+    <script src="{{ asset('assets/js/widgets/world-map-markers.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/simple-datatables.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/qz-tray@2.1.1/qz-tray.js"></script>
     @stack('scripts')
-    {{-- <script src="{{ asset('dist/assets/js/elements/ac-alert.js') }}"></script> --}}
+    {{-- <script src="{{ asset('assets/js/elements/ac-alert.js') }}"></script> --}}
     <!--  --><!-- [Page Specific JS] end --><!-- Required Js -->
-    <script src="{{ asset('dist/assets/js/plugins/popper.min.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/plugins/simplebar.min.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/plugins/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/plugins/i18next.min.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/plugins/i18nextHttpBackend.min.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/icon/custom-font.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/script.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/theme.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/multi-lang.js') }}"></script>
-    <script src="{{ asset('dist/assets/js/plugins/feather.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/simplebar.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/i18next.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/i18nextHttpBackend.min.js') }}"></script>
+    <script src="{{ asset('assets/js/icon/custom-font.js') }}"></script>
+    <script src="{{ asset('assets/js/script.js') }}"></script>
+    <script src="{{ asset('assets/js/theme.js') }}"></script>
+    <script src="{{ asset('assets/js/multi-lang.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/feather.min.js') }}"></script>
     <script src="{{ asset('js/apexcharts.js') }}"></script>
 
     <script>
