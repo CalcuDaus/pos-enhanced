@@ -27,7 +27,7 @@
         <div class="col-md-4 col-sm-6">
             <div class="card statistics-card-1 overflow-hidden">
                 <div class="card-body">
-                    <img src="{{ asset('dist/assets/images/widget/img-status-4.svg') }}" alt="img"
+                    <img src="{{ asset('assets/images/widget/img-status-4.svg') }}" alt="img"
                         class="img-fluid img-bg" />
                     <h5 class="mb-4">Penjualan Hari Ini</h5>
                     <div class="d-flex align-items-center mt-3">
@@ -49,7 +49,7 @@
         <div class="col-md-4 col-sm-6">
             <div class="card statistics-card-1 overflow-hidden">
                 <div class="card-body">
-                    <img src="{{ asset('dist/assets/images/widget/img-status-5.svg') }}" alt="img"
+                    <img src="{{ asset('assets/images/widget/img-status-5.svg') }}" alt="img"
                         class="img-fluid img-bg" />
                     <h5 class="mb-4">Pengeluaran Hari Ini</h5>
                     <div class="d-flex align-items-center mt-3">
@@ -71,7 +71,7 @@
         <div class="col-md-4 col-sm-12">
             <div class="card statistics-card-1 overflow-hidden bg-brand-color-3">
                 <div class="card-body">
-                    <img src="{{ asset('dist/assets/images/widget/img-status-6.svg') }}" alt="img"
+                    <img src="{{ asset('assets/images/widget/img-status-6.svg') }}" alt="img"
                         class="img-fluid img-bg" />
                     <h5 class="mb-4 text-white">Rata - Rata minggu ini</h5>
                     <div class="d-flex align-items-center mt-3">
