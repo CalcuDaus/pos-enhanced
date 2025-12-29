@@ -11,6 +11,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DebtController;
 use App\Http\Controllers\ExpensesController;
+use App\Http\Controllers\DepositController;
 use App\Http\Controllers\InventoryStockController;
 
 
@@ -40,5 +41,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('debts', DebtController::class);
     Route::post('debts/{id}/payoff', [DebtController::class, 'payOff'])->name('debts.payoff');
     Route::post('debts/{id}/add-amount', [DebtController::class, 'addAmount'])->name('debts.add-amount');
+    Route::resource('deposits', DepositController::class);
+    Route::post('deposits/{id}/payoff', [DepositController::class, 'payOff'])->name('deposits.payoff');
+    Route::post('deposits/{id}/add-amount', [DepositController::class, 'addAmount'])->name('deposits.add-amount');
+    Route::post('deposits/{id}/withdraw', [DepositController::class, 'withdrawAmount'])->name('deposits.withdraw');
     Route::get('inventories', [InventoryStockController::class, 'index'])->name('inventories.index');
 });

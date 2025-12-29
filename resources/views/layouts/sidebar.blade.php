@@ -52,6 +52,10 @@
                             data-i18n="Utang">Utang</span></a>
                 </li>
                 <li class="pc-item">
+                    <a href="{{ route('deposits.index') }}" class="pc-link"><span class="pc-micon"><i class="ph-duotone ph-piggy-bank"></i>
+                        </span><span class="pc-mtext" data-i18n="Titipan">Titipan</span></a>
+                    </li>
+                    <li class="pc-item">
                     <a href="{{ route('expenses.index') }}" class="pc-link"><span class="pc-micon"><i
                                 class="ph-duotone ph-cards"></i> </span><span class="pc-mtext"
                             data-i18n="Pengeluaran">Pengeluaran</span></a>

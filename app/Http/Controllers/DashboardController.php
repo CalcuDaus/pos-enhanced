@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Account;
+use App\Models\Deposit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -16,6 +17,8 @@ class DashboardController extends Controller
             'lastYearData' => $this->getYearlySummaryData(),
             'dailyData' => $this->dailySummary(),
             'todaySummary' => $this->todaySummary(),
+            'totalDeposits' => Deposit::sum('amount'),
+            'totalMoney' => Account::sum('balance'),
         ];
 
         return view('dashboard.index', $data);

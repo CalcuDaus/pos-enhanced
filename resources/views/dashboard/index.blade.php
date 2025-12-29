@@ -23,9 +23,9 @@
         </div>
     </div>
     <!-- [ breadcrumb ] end --><!-- [ Main Content ] start -->
-    <div class="row">
-        <div class="col-md-4 col-sm-6">
-            <div class="card statistics-card-1 overflow-hidden">
+    <div class="row g-3">
+        <div class="col-xl-4 col-md-6">
+            <div class="card statistics-card-1 overflow-hidden h-100">
                 <div class="card-body">
                     <img src="{{ asset('assets/images/widget/img-status-4.svg') }}" alt="img"
                         class="img-fluid img-bg" />
@@ -46,8 +46,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4 col-sm-6">
-            <div class="card statistics-card-1 overflow-hidden">
+        <div class="col-xl-4 col-md-6">
+            <div class="card statistics-card-1 overflow-hidden h-100">
                 <div class="card-body">
                     <img src="{{ asset('assets/images/widget/img-status-5.svg') }}" alt="img"
                         class="img-fluid img-bg" />
@@ -68,8 +68,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4 col-sm-12">
-            <div class="card statistics-card-1 overflow-hidden bg-brand-color-3">
+        <div class="col-xl-4 col-md-6">
+            <div class="card statistics-card-1 overflow-hidden bg-brand-color-3 h-100">
                 <div class="card-body">
                     <img src="{{ asset('assets/images/widget/img-status-6.svg') }}" alt="img"
                         class="img-fluid img-bg" />
@@ -85,6 +85,46 @@
                     </p>
                     <div class="progress bg-white bg-opacity-10" style="height: 7px">
                         <div class="progress-bar bg-white" role="progressbar" style="width: 75%" aria-valuenow="75"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-6">
+            <div class="card statistics-card-1 overflow-hidden bg-primary h-100">
+                <div class="card-body">
+                    <img src="{{ asset('assets/images/widget/img-status-7.svg') }}" alt="img" class="img-fluid img-bg" />
+                    <h5 class="mb-4 text-white">Total Titipan</h5>
+                    <div class="d-flex align-items-center mt-3">
+                        <h3 class="text-white f-w-300 d-flex align-items-center m-b-0">
+                            Rp. {{ number_format($totalDeposits, 0, ',', '.') }}
+                        </h3>
+                    </div>
+                    <p class="text-white text-opacity-75 mb-2 text-sm mt-3">
+                        Total uang titipan pelanggan
+                    </p>
+                    <div class="progress bg-white bg-opacity-10" style="height: 7px">
+                        <div class="progress-bar bg-white" role="progressbar" style="width: 100%" aria-valuenow="100"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-6">
+            <div class="card statistics-card-1 overflow-hidden bg-success h-100">
+                <div class="card-body">
+                    <img src="{{ asset('assets/images/widget/img-status-8.svg') }}" alt="img" class="img-fluid img-bg" />
+                    <h5 class="mb-4 text-white">Total Uang</h5>
+                    <div class="d-flex align-items-center mt-3">
+                        <h3 class="text-white f-w-300 d-flex align-items-center m-b-0">
+                            Rp. {{ number_format($totalMoney, 0, ',', '.') }}
+                        </h3>
+                    </div>
+                    <p class="text-white text-opacity-75 mb-2 text-sm mt-3">
+                        Total saldo di semua rekening
+                    </p>
+                    <div class="progress bg-white bg-opacity-10" style="height: 7px">
+                        <div class="progress-bar bg-white" role="progressbar" style="width: 100%" aria-valuenow="100"
                             aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
